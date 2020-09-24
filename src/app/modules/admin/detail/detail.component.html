@@ -1,0 +1,40 @@
+<mat-toolbar color="primary">
+  <img class="avatar" [src]="object.avatar ? object.avatar : 'assets/image/not-found-user.png'" alt="">
+  <span>{{ object.name }}</span>
+</mat-toolbar>
+<div mat-dialog-content>
+  
+  <mat-list>
+    <mat-list-item>
+      <mat-icon matListIcon>alternate_email</mat-icon>
+      <div matLine><strong> E-mail </strong></div>
+      <div matLine class="info"> {{ object.email }} </div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon matListIcon>group</mat-icon>
+      <div matLine><strong> Grupos </strong></div>
+      <mat-chip-list *ngIf="object._groups">
+        <mat-chip *ngFor="let group of object._groups" color="primary" selected>{{ group.name }}</mat-chip>
+      </mat-chip-list>
+      <div matLine class="info" *ngIf="!object._groups">---</div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon matListIcon>lock</mat-icon>
+      <div matLine><strong> Permissões </strong></div>
+      <mat-chip-list *ngIf="object._permissions">
+        <mat-chip *ngFor="let permission of object._permissions" color="primary" selected>{{ permission.page }} - {{ permission.role }}</mat-chip>
+      </mat-chip-list>
+      <div matLine class="info" *ngIf="!object._permissions">---</div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon matListIcon color="success" *ngIf="object.superUser">check_circle</mat-icon>
+      <mat-icon matListIcon color="warn" *ngIf="!object.superUser">cancel</mat-icon>
+      <div matLine><strong> Super Usuário </strong></div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon matListIcon color="success" *ngIf="object.active">check_circle</mat-icon>
+      <mat-icon matListIcon color="warn" *ngIf="!object.active">cancel</mat-icon>
+      <div matLine><strong> Ativo </strong></div>
+    </mat-list-item>
+  </mat-list>
+</div>

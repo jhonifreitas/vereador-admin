@@ -31,7 +31,7 @@ export class AuthGuard implements CanActivate {
             }
           })
         } else {
-          this.router.navigate(['/auth/login']);
+          this.router.navigate(['/entrar']);
           this.storage.removeUser();
           resolve(false);
         }

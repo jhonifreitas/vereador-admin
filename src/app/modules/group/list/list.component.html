@@ -1,11 +1,11 @@
 <div class="header" fxLayout="row" fxLayoutAlign="end center">
   <div fxFlex="50" fxFlex.gt-md="80">
-    <h2 class="title">Permissões</h2>
+    <h2 class="title">Grupos</h2>
   </div>
   <mat-form-field fxFlex="50" fxFlex.gt-md="20">
     <mat-icon matPrefix>search</mat-icon>
     <mat-label>Pesquisar</mat-label>
-    <input matInput [(ngModel)]="filter" name="filter" (keyup)="applyFilter()" placeholder="Ex. Dashboard...">
+    <input matInput [(ngModel)]="filter" name="filter" (keyup)="applyFilter()" placeholder="Ex. Organizador...">
     <button mat-button matSuffix mat-icon-button *ngIf="filter" (click)="filter=''">
       <mat-icon>close</mat-icon>
     </button>
@@ -16,14 +16,9 @@
   <div class="table-responsive">
     <mat-table matSort [dataSource]="dataSource">
   
-      <ng-container matColumnDef="page">
-        <mat-header-cell mat-sort-header *matHeaderCellDef> Página </mat-header-cell>
-        <mat-cell matRipple *matCellDef="let element" fxFlexAlign="stretch" (click)="openDetail(element)"> {{ element.page }} </mat-cell>
-      </ng-container>
-  
-      <ng-container matColumnDef="role">
-        <mat-header-cell mat-sort-header *matHeaderCellDef fxFlex="15"> Regra </mat-header-cell>
-        <mat-cell *matCellDef="let element" fxFlex="15"> {{ element.role }} </mat-cell>
+      <ng-container matColumnDef="name">
+        <mat-header-cell mat-sort-header *matHeaderCellDef> Nome </mat-header-cell>
+        <mat-cell matRipple *matCellDef="let element" fxFlexAlign="stretch" (click)="openDetail(element)"> {{ element.name }} </mat-cell>
       </ng-container>
   
       <ng-container matColumnDef="actions">

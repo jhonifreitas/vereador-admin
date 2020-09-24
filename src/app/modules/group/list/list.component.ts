@@ -4,19 +4,19 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { Permission } from 'src/app/models/permission';
-import { PermissionFormPage } from '../form/form.component';
-import { PermissionDetailPage } from '../detail/detail.component';
+import { Group } from 'src/app/models/group';
+import { GroupFormPage } from '../form/form.component';
+import { GroupDetailPage } from '../detail/detail.component';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
-import { FBPermissionService } from 'src/app/services/firebase/permission/permission.service';
+import { FBGroupService } from 'src/app/services/firebase/group/group.service';
 
 @Component({
-  selector: 'app-permission-list',
+  selector: 'app-group-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class PermissionListPage implements OnInit {
+export class GroupListPage implements OnInit {
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -28,14 +28,14 @@ export class PermissionListPage implements OnInit {
 
   filter: string;
   loading = true;
-  dataSource: MatTableDataSource<Permission>;
-  displayedColumns: string[] = ['page', 'role', 'actions'];
+  dataSource: MatTableDataSource<Group>;
+  displayedColumns: string[] = ['name', 'actions'];
 
   constructor(
     private router: Router,
     private utils: UtilsService,
     private storage: StorageService,
-    private fbPermission: FBPermissionService,
+    private fbGroup: FBGroupService,
   ) {
   }
 
@@ -43,8 +43,8 @@ export class PermissionListPage implements OnInit {
     if(!this.storage.getUser().superUser){
       this.router.navigate(['/error/403']);
     }
-    this.fbPermission.all().subscribe(permissions => {
-      this.dataSource = new MatTableDataSource<Permission>(permissions);
+    this.fbGroup.all().subscribe(groups => {
+      this.dataSource = new MatTableDataSource<Group>(groups);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.loading = false;
@@ -55,26 +55,26 @@ export class PermissionListPage implements OnInit {
     this.dataSource.filter = this.filter.trim().toLowerCase();
   }
 
-  openDetail(object?: Permission) {
+  openDetail(object?: Group) {
     if(this.canView){
-      this.utils.detail(PermissionDetailPage, object);
+      this.utils.detail(GroupDetailPage, object);
     }
   }
 
-  openForm(object?: Permission) {
-    this.utils.form(PermissionFormPage, object).then(_ => {
+  openForm(object?: Group) {
+    this.utils.form(GroupFormPage, object).then(_ => {
       this.ngOnInit();
     });
   }
 
-  async delete(object: Permission) {
-    await this.fbPermission.delete(object.id).then(_ => {
+  async delete(object: Group) {
+    await this.fbGroup.delete(object.id).then(_ => {
       this.ngOnInit();
       this.utils.message('Permissão excluída com sucesso!', 'success');
     });
   }
 
-  confirmDelete(object: Permission) {
+  confirmDelete(object: Group) {
     this.utils.delete().then(async _ => {
       this.delete(object);
     }).catch(_ => {})

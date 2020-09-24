@@ -16,8 +16,8 @@ export class FBAuthService {
 
   signIn(email: string, password: string): Promise<Admin> {
     return new Promise((resolve, reject) => {
-      this.auth.signInWithEmailAndPassword(email, password).then(_ => {
-        this.fbAdmin.getByEmail(email).subscribe(user => {
+      this.auth.signInWithEmailAndPassword(email, password).then(credential => {
+        this.fbAdmin.get(credential.user.uid).subscribe(user => {
           if(user){
             resolve(user);
           }else{

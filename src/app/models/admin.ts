@@ -8,6 +8,7 @@ export class Admin {
   avatar?: string;
   active: boolean;
   groups: string[];
+  password?: string;
   superUser: boolean;
   permissions?: string[];
 

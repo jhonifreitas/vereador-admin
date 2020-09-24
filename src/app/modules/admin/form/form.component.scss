@@ -1,0 +1,31 @@
+form{
+  .image{
+    width: 180px;
+    height: 180px;
+    position: relative;
+    margin: 0 auto 1rem auto;
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .mat-mini-fab{
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+  ngx-dropzone{
+    width: 100%;
+    padding: 0 !important;
+    margin-bottom: 1rem;
+  }
+
+  [fxlayout="row"]{margin-bottom: .5rem;}
+  .map{
+    height: 15rem;
+    border-radius: 15px;
+  }
+}
+.mat-progress-spinner{margin-left: .5rem;}

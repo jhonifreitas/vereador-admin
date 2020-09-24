@@ -1,28 +1,78 @@
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { AnimationOptions } from 'ngx-lottie';
-
-import { Global } from 'src/app/models/global';
+import { Admin } from 'src/app/models/admin';
+import { AdminFormPage } from '../form/form.component';
+import { AdminDetailPage } from '../detail/detail.component';
+import { UtilsService } from 'src/app/services/utils/utils.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
+import { FBAdminService } from 'src/app/services/firebase/admin/admin.service';
 
 @Component({
   selector: 'app-admin-list',
-  templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.scss']
+  templateUrl: './list.component.html',
+  styleUrls: ['./list.component.scss']
 })
-export class AdminListComponent implements OnInit {
+export class AdminListPage implements OnInit {
 
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+
+  canView = this.storage.getUser().superUser;
+  canAdd = this.storage.getUser().superUser;
+  canUpdate = this.storage.getUser().superUser;
+  canDelete = this.storage.getUser().superUser;
+
+  filter: string;
   loading = true;
-  lottieOpts: AnimationOptions = {path: '/assets/lottie/loading.json'};
+  dataSource: MatTableDataSource<Admin>;
+  displayedColumns: string[] = ['name', 'email', 'superUser', 'active', 'avatar', 'actions'];
 
   constructor(
     private router: Router,
-    private global: Global
-    ) { }
+    private utils: UtilsService,
+    private storage: StorageService,
+    private fbAdmin: FBAdminService,
+  ) {
+  }
 
-  ngOnInit() {
-    if(!this.global.hasPermission('admin', 'can-view')){
+  ngOnInit(): void {
+    if(!this.storage.getUser().superUser){
       this.router.navigate(['/error/403']);
     }
+    this.fbAdmin.all().subscribe(temples => {
+      this.dataSource = new MatTableDataSource<Admin>(temples);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+      this.loading = false;
+    });
+  }
+
+  applyFilter() {
+    this.dataSource.filter = this.filter.trim().toLowerCase();
+  }
+
+  openDetail(object?: Admin) {
+    if(this.canView){
+      this.utils.detail(AdminDetailPage, object);
+    }
+  }
+
+  openForm(object?: Admin) {
+    this.utils.form(AdminFormPage, object);
+  }
+
+  async delete(object: Admin) {
+    await this.fbAdmin.delete(object.uid);
+    this.utils.message('Usuário excluído com sucesso!', 'success');
+  }
+
+  confirmDelete(object: Admin) {
+    this.utils.delete().then(async _ => {
+      this.delete(object);
+    }).catch(_ => {})
   }
 }

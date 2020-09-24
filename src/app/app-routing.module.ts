@@ -4,15 +4,21 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './guards/auth/auth.guard';
 import { AuthFormPage } from './modules/auth/auth.component';
 import { DefaultLayout } from './layouts/default/default.component';
+import { AdminListPage } from './modules/admin/list/list.component';
+import { GroupListPage } from './modules/group/list/list.component';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
+import { PermissionListPage } from './modules/permission/list/list.component';
 
 const routes: Routes = [
-  { path: 'auth', children: [
-    { path: 'login', component: AuthFormPage }
-  ]},
+  { path: 'entrar', component: AuthFormPage },
 
   { path: '', canActivate: [AuthGuard], component: DefaultLayout, children: [
     { path: '', component: DashboardComponent },
+    { path: 'auth', children: [
+      { path: 'grupos', component: GroupListPage },
+      { path: 'usuarios', component: AdminListPage },
+      { path: 'permissoes', component: PermissionListPage }
+    ]},
   ]},
 
   // ERROR PAGES

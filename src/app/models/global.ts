@@ -139,8 +139,9 @@ export class Global {
   ) {}
 
   hasPermission(page: string, role: string): boolean {
-    const permission = this.storage.getPermissions().findIndex(permission => permission.page == page && permission.role == role);
-    const permissionGroup = this.storage.getGroups().findIndex(group => group._permissions.findIndex(permission => permission.page == page && permission.role == role));
-    return permission >= 0 || permissionGroup >= 0 || this.storage.getUser().superUser;
+    if (this.storage.getUser().superUser) return true;
+    const permission = this.storage.getPermissions().find(permission => permission.page == page && permission.role == role);
+    const permissionGroup = this.storage.getGroups().find(group => group._permissions.find(permission => permission.page == page && permission.role == role));
+    return permission != undefined || permissionGroup != undefined;
   }
 }

@@ -33,8 +33,20 @@ import { MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginato
 // MODULES =======================================================================
 // ===============================================================================
 import { DeleteDialog } from 'src/app/shared/components/delete/delete.component';
-import { LoadingDialog } from 'src/app/shared/components/loading/loading.component';
 import { DashboardComponent } from 'src/app/modules/dashboard/dashboard.component';
+import { LoadingDialog } from 'src/app/shared/components/loading/loading.component';
+// ADMIN
+import { AdminListPage } from 'src/app/modules/admin/list/list.component';
+import { AdminFormPage } from 'src/app/modules/admin/form/form.component';
+import { AdminDetailPage } from 'src/app/modules/admin/detail/detail.component';
+// GROUP
+import { GroupListPage } from 'src/app/modules/group/list/list.component';
+import { GroupFormPage } from 'src/app/modules/group/form/form.component';
+import { GroupDetailPage } from 'src/app/modules/group/detail/detail.component';
+// PERMISSION
+import { PermissionListPage } from 'src/app/modules/permission/list/list.component';
+import { PermissionFormPage } from 'src/app/modules/permission/form/form.component';
+import { PermissionDetailPage } from 'src/app/modules/permission/detail/detail.component';
 
 // MASK
 import { NgxMaskModule } from 'ngx-mask';
@@ -61,7 +73,16 @@ import { translateMatPaginator } from 'src/app/services/localization/localizatio
     DeleteDialog,
     DefaultLayout,
     LoadingDialog,
+    AdminListPage,
+    AdminFormPage,
+    GroupListPage,
+    GroupFormPage,
+    AdminDetailPage,
+    GroupDetailPage,
     DashboardComponent,
+    PermissionListPage,
+    PermissionFormPage,
+    PermissionDetailPage,
   ],
   imports: [
     FormsModule,

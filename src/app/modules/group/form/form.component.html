@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>Formulário de grupo</h1>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+
+    <mat-form-field>
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="name" cdkFocusInitial>
+      <mat-error>Nome é <strong>obrigatório!</strong></mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Permissões</mat-label>
+      <mat-select formControlName="permissions" multiple placeholder="---">
+        <mat-option *ngFor="let permission of permissions" [value]="permission.id">{{ permission.page }} - {{ permission.role }}</mat-option>
+      </mat-select>
+      <mat-error>Permissões é obrigatório!</mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions fxLayoutAlign="end center">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="form.invalid" *ngIf="!saving" (click)="save()">Salvar</button>
+  <mat-progress-spinner mode="indeterminate" diameter="25" *ngIf="saving"></mat-progress-spinner>
+</div>

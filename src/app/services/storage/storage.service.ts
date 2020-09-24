@@ -30,10 +30,11 @@ export class StorageService {
       this.setPermissions(permissions)
     }
     if(data.groups){
-      for(const group_id of data.groups) {
-        await this.fbGroup.get(group_id).toPromise().then(async group => {
-          for(const permission_id of group.permissions) {
-            await this.fbPermission.get(permission_id).toPromise().then(permission => {
+      for(const groupId of data.groups) {
+        await this.fbGroup.get(groupId).toPromise().then(async group => {
+          group._permissions = [];
+          for(const permissionId of group.permissions) {
+            await this.fbPermission.get(permissionId).toPromise().then(permission => {
               group._permissions.push(permission);
             })
           }

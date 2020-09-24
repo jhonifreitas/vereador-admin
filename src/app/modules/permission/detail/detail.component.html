@@ -1,0 +1,18 @@
+<mat-toolbar color="primary">
+  <span>Permissão</span>
+</mat-toolbar>
+<div mat-dialog-content>
+  
+  <mat-list>
+    <mat-list-item>
+      <mat-icon matListIcon>home</mat-icon>
+      <div matLine><strong> Página </strong></div>
+      <div matLine class="info"> {{ object.page }} </div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon matListIcon>lock</mat-icon>
+      <div matLine><strong> Regra </strong></div>
+      <div matLine class="info"> {{ object.role }} </div>
+    </mat-list-item>
+  </mat-list>
+</div>

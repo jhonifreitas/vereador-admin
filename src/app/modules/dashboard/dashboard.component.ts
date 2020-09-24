@@ -22,7 +22,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private router: Router,
     private global: Global,
-    ) { }
+  ) { }
 
   ngOnInit() {
     if(!this.global.hasPermission('dashboard', 'can-view')){
