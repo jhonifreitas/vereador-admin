@@ -32,9 +32,13 @@ import { MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginato
 // ===============================================================================
 // MODULES =======================================================================
 // ===============================================================================
+import { DashboardPage } from 'src/app/modules/dashboard/dashboard.component';
 import { DeleteDialog } from 'src/app/shared/components/delete/delete.component';
-import { DashboardComponent } from 'src/app/modules/dashboard/dashboard.component';
 import { LoadingDialog } from 'src/app/shared/components/loading/loading.component';
+// CATEGORY
+import { CategoryListPage } from 'src/app/modules/category/list/list.component';
+import { CategoryFormPage } from 'src/app/modules/category/form/form.component';
+import { CategoryDetailPage } from 'src/app/modules/category/detail/detail.component';
 // ADMIN
 import { AdminListPage } from 'src/app/modules/admin/list/list.component';
 import { AdminFormPage } from 'src/app/modules/admin/form/form.component';
@@ -77,9 +81,12 @@ import { translateMatPaginator } from 'src/app/services/localization/localizatio
     AdminFormPage,
     GroupListPage,
     GroupFormPage,
+    DashboardPage,
     AdminDetailPage,
     GroupDetailPage,
-    DashboardComponent,
+    CategoryListPage,
+    CategoryFormPage,
+    CategoryDetailPage,
     PermissionListPage,
     PermissionFormPage,
     PermissionDetailPage,

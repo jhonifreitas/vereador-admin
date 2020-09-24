@@ -10,7 +10,7 @@ import { Global } from 'src/app/models/global';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardPage implements OnInit {
 
   @ViewChild('map') mapElement: ElementRef;
 

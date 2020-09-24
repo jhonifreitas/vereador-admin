@@ -1,0 +1,18 @@
+<mat-toolbar color="primary">
+  <span>Categoria</span>
+</mat-toolbar>
+<div mat-dialog-content>
+  
+  <mat-list>
+    <mat-list-item>
+      <mat-icon matListIcon>more_horiz</mat-icon>
+      <div matLine><strong> Nome </strong></div>
+      <div matLine class="info"> {{ object.name }} </div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon matListIcon>format_align_left</mat-icon>
+      <div matLine><strong> Texto </strong></div>
+      <div matLine class="info"> {{ object.text }} </div>
+    </mat-list-item>
+  </mat-list>
+</div>
