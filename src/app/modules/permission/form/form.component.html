@@ -1,0 +1,87 @@
+<h1 mat-dialog-title>Formulário de templo</h1>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+
+    <div class="image" *ngIf="image">
+      <button mat-mini-fab color="warn" (click)="deleteImage()">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <img [src]="image.path" alt="">
+    </div>
+    <ngx-dropzone (change)="takeImage($event)" *ngIf="!image">
+      <ngx-dropzone-label>Arraste os arquivos aqui ou clique para fazer o upload.</ngx-dropzone-label>
+    </ngx-dropzone>
+    
+    <div fxLayout="row">
+      <mat-form-field fxFlex="100">
+        <mat-label>Nome</mat-label>
+        <input matInput formControlName="name" cdkFocusInitial>
+        <mat-error>Nome é <strong>obrigatório!</strong></mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row">
+      <mat-form-field fxFlex="100">
+        <mat-label>Localização</mat-label>
+        <input matInput [formControl]="localization" (input)="filterPlace()" [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option 
+            *ngFor="let address of googleAddress"
+            [value]="address.description"
+            (click)="selectLocalization(address.place_id)"
+          >
+            {{ address.description }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error>Selecione uma localização válida!</mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutGap="20px">
+      <mat-form-field fxFlex="25">
+        <mat-label>CEP</mat-label>
+        <input matInput formControlName="zipcode" mask="00000-000">
+        <mat-error *ngIf="form.get('zipcode').hasError('required')">CEP é <strong>obrigatório!</strong></mat-error>
+        <mat-error *ngIf="form.get('zipcode').hasError('minlength')">CEP deve conter <strong>8 digitos!</strong></mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex="60">
+        <mat-label>Rua</mat-label>
+        <input matInput formControlName="address">
+        <mat-error>Rua é <strong>obrigatório!</strong></mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex="15">
+        <mat-label>Número</mat-label>
+        <input matInput formControlName="number">
+        <mat-error>Número é <strong>obrigatório!</strong></mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutGap="20px">
+      <mat-form-field fxFlex="50">
+        <mat-label>Cidade</mat-label>
+        <input matInput formControlName="city">
+        <mat-error>Cidade é <strong>obrigatório!</strong></mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex="50">
+        <mat-label>Estado</mat-label>
+        <input matInput formControlName="state">
+        <mat-error>Estado é <strong>obrigatório!</strong></mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutGap="20px">
+      <mat-form-field fxFlex="50">
+        <mat-label>Bairro</mat-label>
+        <input matInput formControlName="district">
+        <mat-error>Bairro é <strong>obrigatório!</strong></mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex="50">
+        <mat-label>Complemento</mat-label>
+        <input matInput formControlName="complement">
+      </mat-form-field>
+    </div>
+
+    <div #map class="map" *ngIf="form.get('lat').valid && form.get('lng').valid"></div>
+  </form>
+</div>
+<div mat-dialog-actions fxLayoutAlign="end center">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="form.invalid" *ngIf="!saving" (click)="save()">Salvar</button>
+  <mat-progress-spinner mode="indeterminate" diameter="25" *ngIf="saving"></mat-progress-spinner>
+</div>

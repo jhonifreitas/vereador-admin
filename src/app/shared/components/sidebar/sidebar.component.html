@@ -1,0 +1,40 @@
+<mat-nav-list *ngIf="storage.getUser()">
+  <div class="profile-card">
+    <img [src]="storage.getUser().avatar ? storage.getUser().avatar : 'assets/image/not-found-user.png'" alt="">
+    <div class="header">
+      <h2>{{ storage.getUser().name }}</h2>
+      <h4>{{ storage.getUser().email }}</h4>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <h2 matSubheader>Menu</h2>
+
+  <div *ngFor="let page of pages" [hidden]="page.hidden">
+    <a mat-list-item *ngIf="!page.subPages" (click)="closeSideBar()" routerLinkActive="list-item-active" [routerLink]="page.url">
+      <mat-icon matListIcon>{{ page.icon }}</mat-icon>
+      <h3 matLine>{{ page.title }}</h3>
+    </a>
+
+    <mat-accordion *ngIf="page.subPages">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon matListIcon>{{ page.icon }}</mat-icon>
+            <span>{{ page.title }}</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div *ngFor="let subpage of page.subPages" [hidden]="subpage.hidden">
+          <a mat-list-item (click)="closeSideBar()" routerLinkActive="list-item-active" [routerLink]="subpage.url">
+            <mat-icon matListIcon>{{ subpage.icon }}</mat-icon>
+            <h3 matLine>{{ subpage.title }}</h3>
+          </a>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  
+  <mat-divider></mat-divider>
+
+</mat-nav-list>

@@ -1,0 +1,21 @@
+<mat-toolbar color="primary">
+  <mat-icon>warning</mat-icon>
+  <span>
+    <p>Excluir este registro?</p>
+    <small>Esta ação excluirá permanentemente o registro.</small>
+  </span>
+</mat-toolbar>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <p>Confirme a exclusão desse registro inserindo: <strong>SIM</strong></p>
+    <mat-form-field>
+      <mat-label>Confirmação</mat-label>
+      <input matInput formControlName="confirm" placeholder="SIM">
+      <mat-error>Confirmação é <strong>obrigatório!</strong></mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-raised-button color="warn" [disabled]="form.invalid" (click)="delete()">Excluir</button>
+</div>

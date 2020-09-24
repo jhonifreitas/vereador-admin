@@ -1,0 +1,22 @@
+mat-toolbar{
+    mat-icon{margin-right: 1rem;}
+    span{
+        line-height: 1;
+        p{
+            margin: 0;
+            line-height: 1;
+        }
+        small{
+            font-size: 50%;
+            line-height: 1;
+        }
+    }
+}
+.mat-dialog-content{
+    padding: 1rem 1.5rem;
+}
+.mat-dialog-actions{
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+    margin-bottom: 0;
+}

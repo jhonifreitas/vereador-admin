@@ -1,0 +1,31 @@
+<div class="container" fxLayout="row" fxLayoutAlign="center start">
+  <form [formGroup]="form" (ngSubmit)="auth()" class="mat-elevation-z8" fxFlex="100" fxFlex.gt-md="30">
+
+    <!-- <div class="logo text-center">
+      <img src="assets/icon/logo.svg" alt="">
+    </div> -->
+
+    <h2 class="title font-weight-bold">Bem vindo!</h2>
+    <p class="subtitle">Digite seu endereço de e-mail e senha para acessar o painel.</p>
+
+    <mat-form-field>
+      <mat-label>E-mail</mat-label>
+      <input matInput formControlName="email" autofocus>
+      <mat-error>E-mail é <strong>obrigatório!</strong></mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Senha</mat-label>
+      <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+      <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <mat-error>Senha é <strong>obrigatório!</strong></mat-error>
+    </mat-form-field>
+    
+    <button mat-raised-button type="submit" color="primary" [disabled]="loading">
+      <span *ngIf="!loading">Entrar</span>
+      <span *ngIf="loading">Entrando...</span>
+    </button>
+  </form>
+</div>
