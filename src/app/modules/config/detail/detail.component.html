@@ -1,0 +1,19 @@
+<mat-toolbar color="primary">
+  <img class="avatar" [src]="object.image" *ngIf="object.image" alt="">
+  <span>Configuração</span>
+</mat-toolbar>
+<div mat-dialog-content>
+  
+  <mat-list>
+    <mat-list-item>
+      <mat-icon matListIcon>home</mat-icon>
+      <div matLine><strong> Título </strong></div>
+      <div matLine class="info"> {{ object.title }} </div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon matListIcon>lock</mat-icon>
+      <div matLine><strong> Descrição </strong></div>
+      <div matLine class="info"> {{ object.description }} </div>
+    </mat-list-item>
+  </mat-list>
+</div>

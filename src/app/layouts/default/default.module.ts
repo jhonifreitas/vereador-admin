@@ -39,6 +39,10 @@ import { LoadingDialog } from 'src/app/shared/components/loading/loading.compone
 import { CategoryListPage } from 'src/app/modules/category/list/list.component';
 import { CategoryFormPage } from 'src/app/modules/category/form/form.component';
 import { CategoryDetailPage } from 'src/app/modules/category/detail/detail.component';
+// CONFIG
+import { ConfigListPage } from 'src/app/modules/config/list/list.component';
+import { ConfigFormPage } from 'src/app/modules/config/form/form.component';
+import { ConfigDetailPage } from 'src/app/modules/config/detail/detail.component';
 // ADMIN
 import { AdminListPage } from 'src/app/modules/admin/list/list.component';
 import { AdminFormPage } from 'src/app/modules/admin/form/form.component';
@@ -82,8 +86,11 @@ import { translateMatPaginator } from 'src/app/services/localization/localizatio
     GroupListPage,
     GroupFormPage,
     DashboardPage,
+    ConfigFormPage,
+    ConfigListPage,
     AdminDetailPage,
     GroupDetailPage,
+    ConfigDetailPage,
     CategoryListPage,
     CategoryFormPage,
     CategoryDetailPage,

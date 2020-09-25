@@ -1,16 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatListModule } from '@angular/material/list';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatExpansionModule } from '@angular/material/expansion';
+import { ReactiveFormsModule } from '@angular/forms';
 
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { HighchartsChartModule } from 'highcharts-angular';
+
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 import { PieComponent } from './widgets/pie/pie.component';
 import { AreaComponent } from './widgets/area/area.component';
@@ -18,6 +22,7 @@ import { CardComponent } from './widgets/card/card.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { SelectTagComponent } from './widgets/select-tag/select-tag.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +32,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     FooterComponent,
     HeaderComponent,
     SidebarComponent,
+    SelectTagComponent,
   ],
   imports: [
     RouterModule,
@@ -34,12 +40,15 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     MatIconModule,
     MatMenuModule,
     MatListModule,
+    MatChipsModule,
+    MatInputModule,
     MatButtonModule,
     MatToolbarModule,
     FlexLayoutModule,
     MatDividerModule,
     MatExpansionModule,
-    HighchartsChartModule
+    ReactiveFormsModule,
+    HighchartsChartModule,
   ],
   exports: [
     PieComponent,
@@ -48,6 +57,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     HeaderComponent,
     FooterComponent,
     SidebarComponent,
+    SelectTagComponent,
   ]
 })
 export class SharedModule { }

@@ -4,11 +4,11 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
+import { Global } from 'src/app/models/global';
 import { Category } from 'src/app/models/category';
 import { CategoryFormPage } from '../form/form.component';
 import { CategoryDetailPage } from '../detail/detail.component';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { StorageService } from 'src/app/services/storage/storage.service';
 import { FBCategoryService } from 'src/app/services/firebase/category/category.service';
 
 @Component({
@@ -21,10 +21,10 @@ export class CategoryListPage implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  canView = this.storage.getUser().superUser;
-  canAdd = this.storage.getUser().superUser;
-  canUpdate = this.storage.getUser().superUser;
-  canDelete = this.storage.getUser().superUser;
+  canView = this.global.hasPermission('category', 'can-view');
+  canAdd = this.global.hasPermission('category', 'can-add');
+  canUpdate = this.global.hasPermission('category', 'can-update');
+  canDelete = this.global.hasPermission('category', 'can-delete');
 
   filter: string;
   loading = true;
@@ -33,14 +33,14 @@ export class CategoryListPage implements OnInit {
 
   constructor(
     private router: Router,
+    private global: Global,
     private utils: UtilsService,
-    private storage: StorageService,
     private fbCategory: FBCategoryService,
   ) {
   }
 
   ngOnInit(): void {
-    if(!this.storage.getUser().superUser){
+    if(!this.global.hasPermission('category', 'can-list')){
       this.router.navigate(['/error/403']);
     }
     this.fbCategory.all().subscribe(categories => {

@@ -4,11 +4,13 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 
 import { Admin } from 'src/app/models/admin';
 import { Group } from 'src/app/models/group';
+import { Config } from 'src/app/models/config';
 import { Permission } from 'src/app/models/permission';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { FBAdminService } from 'src/app/services/firebase/admin/admin.service';
 import { FBGroupService } from 'src/app/services/firebase/group/group.service';
 import { FBPermissionService } from 'src/app/services/firebase/permission/permission.service';
+import { FBConfigService } from 'src/app/services/firebase/config/config.service';
 
 @Component({
   selector: 'app-admin-form',
@@ -20,6 +22,7 @@ export class AdminFormPage implements OnInit {
   saving = false;
   form: FormGroup;
   groups: Group[];
+  configs: Config[];
   permissions: Permission[];
   image: {path: string; new: boolean, file?: Blob;};
 
@@ -29,6 +32,7 @@ export class AdminFormPage implements OnInit {
     private formGroup: FormBuilder,
     private fbAdmin: FBAdminService,
     private fbGroup: FBGroupService,
+    private fbConfig: FBConfigService,
     private fbPermission: FBPermissionService,
     private dialogRef: MatDialogRef<AdminFormPage>,
   ) {
@@ -36,6 +40,7 @@ export class AdminFormPage implements OnInit {
       name: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
       groups: new FormControl(''),
+      config: new FormControl(''),
       permissions: new FormControl(''),
       password: new FormControl(''),
       confirmPass: new FormControl(''),
@@ -43,6 +48,7 @@ export class AdminFormPage implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getConfigs();
     this.getGroups();
     this.getPermissions();
     if(this.data){
@@ -66,10 +72,20 @@ export class AdminFormPage implements OnInit {
   }
 
   setData() {
+    if(this.data.avatar){
+      this.image = {path: this.data.avatar, new: false};
+    }
     this.form.get('name').setValue(this.data.name);
     this.form.get('email').setValue(this.data.email);
+    this.form.get('config').setValue(this.data.config);
     this.form.get('groups').setValue(this.data.groups);
     this.form.get('permissions').setValue(this.data.permissions);
+  }
+
+  getConfigs() {
+    this.fbConfig.all().subscribe(configs => {
+      this.configs = configs;
+    })
   }
 
   getGroups() {

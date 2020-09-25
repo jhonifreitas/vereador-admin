@@ -1,0 +1,15 @@
+<mat-form-field>
+  <mat-chip-list #chipList [formControl]="control"> 
+    <mat-chip class="mat-chip-selected" *ngFor="let value of control.value; index as i"
+      color="primary" (removed)="remove(i)" selected>
+      {{ value }}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+    <input
+      [placeholder]="placeholder"
+      [matChipInputFor]="chipList"
+      (matChipInputTokenEnd)="add($event)"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+  </mat-chip-list>
+  <mat-error>{{ placeholder }} é <strong>obrigatório!</strong></mat-error>
+</mat-form-field>

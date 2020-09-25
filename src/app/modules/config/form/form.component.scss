@@ -1,0 +1,33 @@
+.container{
+  padding: 1rem 2rem;
+  margin-bottom: 1.5rem;
+  [fxlayout="row"]{margin-bottom: .5rem;}
+  &:last-child:not(#share):not(#image){margin-bottom: 7.5rem;}
+
+  .image{
+    position: relative;
+    margin: 0 auto;
+    width: 180px;
+    height: 180px;
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .mat-mini-fab{
+      top: 0;
+      right: 0;
+      position: absolute;
+    }
+  }
+  mat-form-field{
+    width: 100%;
+    margin-bottom: .5rem;
+  }
+  ngx-dropzone{
+    width: 100%;
+    padding: 0 !important;
+    margin-bottom: 1rem;
+  }
+}

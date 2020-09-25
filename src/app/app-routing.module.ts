@@ -6,6 +6,8 @@ import { AuthFormPage } from './modules/auth/auth.component';
 import { DefaultLayout } from './layouts/default/default.component';
 import { AdminListPage } from './modules/admin/list/list.component';
 import { GroupListPage } from './modules/group/list/list.component';
+import { ConfigListPage} from './modules/config/list/list.component';
+import { ConfigFormPage} from './modules/config/form/form.component';
 import { DashboardPage} from './modules/dashboard/dashboard.component';
 import { CategoryListPage } from './modules/category/list/list.component';
 import { PermissionListPage } from './modules/permission/list/list.component';
@@ -16,6 +18,11 @@ const routes: Routes = [
   { path: '', canActivate: [AuthGuard], component: DefaultLayout, children: [
     { path: '', component: DashboardPage },
     { path: 'categorias', component: CategoryListPage },
+    { path: 'configuracoes', children: [
+      { path: '', component: ConfigListPage },
+      { path: 'formulario', component: ConfigFormPage },
+      { path: 'formulario/:id', component: ConfigFormPage },
+    ]},
     { path: 'auth', children: [
       { path: 'grupos', component: GroupListPage },
       { path: 'usuarios', component: AdminListPage },

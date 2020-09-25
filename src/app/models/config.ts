@@ -1,6 +1,11 @@
 export class Config {
   id?: string;
   image: string;
-  phone: string;
-  msg: string;
+  sharePhone: string;
+  shareMsg: string;
+
+  // WEBSITE
+  title: string;
+  keywords: string[];
+  description: string;
 }

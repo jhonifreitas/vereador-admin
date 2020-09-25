@@ -27,6 +27,7 @@ export class SidebarComponent implements OnInit {
   pages: Page[] = [
     { title: 'Dashboard', url: '/', icon: 'dashboard', hidden: false, permission: {page: 'dashboard', role: 'can-view'} },
     { title: 'Categorias', url: '/categorias', icon: 'category', hidden: false, permission: {page: 'category', role: 'can-list'} },
+    { title: 'Configurações', url: '/configuracoes', icon: 'miscellaneous_services', hidden: false, permission: {page: 'configuration', role: 'can-view'} },
     { title: 'Autorização', icon: 'verified_user', hidden: false, subPages: [
       { title: 'Usuários', url: '/auth/usuarios', icon: 'person', hidden: false, permission: {page: 'admin', role: 'can-list'} },
       { title: 'Grupos', url: '/auth/grupos', icon: 'group', hidden: false, permission: {page: 'groups', role: 'can-list'} },
