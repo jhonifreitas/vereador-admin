@@ -1,5 +1,4 @@
 @import './theme';
-@import "~@ng-select/ng-select/themes/material.theme.css";
 
 html, body {height: 100%;}
 body {margin: 0; font-family: "Roboto", "Helvetica Neue", sans-serif; }
@@ -137,15 +136,5 @@ snack-bar-container {
     color: mat-color($warn, default-contrast);
     background: mat-color($warn);
     .mat-simple-snackbar-action {color: mat-color($warn, default-contrast);}
-  }
-}
-
-// NG SELECT
-ng-select.ng-select{
-  padding-bottom: 0;
-  .ng-select-container{
-    min-height: auto;
-    &::after{display: none;}
-    .ng-clear-wrapper, .ng-arrow-wrapper, .ng-value-container{border-top: none !important;}
   }
 }
