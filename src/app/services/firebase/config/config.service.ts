@@ -55,8 +55,8 @@ export class FBConfigService {
   async addImage(url: string, file: Blob){
     const fileName = url+'.png';
     return await this.afStorage.ref(`${this.collectionName}/${fileName}`).put(file).then(async (res) => {
-      const url = await res.ref.getDownloadURL();
-      await this.update(url, {image: url});
+      const imageUrl = await res.ref.getDownloadURL();
+      await this.update(url, {image: imageUrl});
     });
   }
 

@@ -1,39 +1,17 @@
 <h2 class="title">Configurações gerais</h2>
 
 <form [formGroup]="form">
-  <div fxLayout="row" fxLayoutGap="20px">
-    <div fxFlex="70">
-      <div id="share" class="container mat-elevation-z8">
-        <h2>Compartilhamento</h2>
-
-        <mat-form-field>
-          <mat-label>Telefone</mat-label>
-          <input matInput formControlName="sharePhone" mask="(00) 00000-0000" cdkFocusInitial>
-          <mat-error>Telefone é <strong>obrigatório!</strong></mat-error>
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-label>Mensagem</mat-label>
-          <textarea matInput formControlName="shareMsg"></textarea>
-          <mat-error>Mensagem é <strong>obrigatório!</strong></mat-error>
-        </mat-form-field>
-      </div>
+  <div id="images" class="container mat-elevation-z8">
+    <h2>Imagem</h2>
+    <div class="image" *ngIf="image">
+      <button mat-mini-fab color="warn" (click)="deleteImage()">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <img [src]="image.path" alt="">
     </div>
-    <!-- IMAGE -->
-    <div fxFlex="30">
-      <div id="image" class="container mat-elevation-z8">
-        <h2>Imagem</h2>
-        <div class="image" *ngIf="image">
-          <button mat-mini-fab color="warn" (click)="deleteImage()">
-            <mat-icon>delete</mat-icon>
-          </button>
-          <img [src]="image.path" alt="">
-        </div>
-        <ngx-dropzone (change)="takeImage($event)" *ngIf="!image">
-          <ngx-dropzone-label>Arraste os arquivos aqui ou clique para fazer o upload.</ngx-dropzone-label>
-        </ngx-dropzone>
-      </div>
-    </div>
+    <ngx-dropzone (change)="takeImage($event)" *ngIf="!image">
+      <ngx-dropzone-label>Arraste os arquivos aqui ou clique para fazer o upload.</ngx-dropzone-label>
+    </ngx-dropzone>
   </div>
   <!-- WEBSITE -->
   <div id="website" class="container mat-elevation-z8">
@@ -48,7 +26,7 @@
       <mat-form-field>
         <mat-label>Url</mat-label>
         <input matInput formControlName="url" (blur)="checkUrl()">
-        <mat-hint>Ex: pedro-josé</mat-hint>
+        <mat-hint>https://minhaproposta.org/{{ this.form.get('url').value }}</mat-hint>
         <mat-error *ngIf="controlUrl.hasError('exist')">Url já <strong>existente!</strong></mat-error>
         <mat-error *ngIf="controlUrl.hasError('required')">Url é <strong>obrigatório!</strong></mat-error>
         <mat-error *ngIf="controlUrl.hasError('hasSpace')">Url não pode conter <strong>espaço!</strong></mat-error>
@@ -63,6 +41,12 @@
       <mat-label>Descrição</mat-label>
       <textarea matInput formControlName="description"></textarea>
       <mat-error>Descrição é <strong>obrigatório!</strong></mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Mensagem de compartilhamento</mat-label>
+      <textarea matInput rows="4" formControlName="shareMsg"></textarea>
+      <mat-error>Mensagem é <strong>obrigatório!</strong></mat-error>
     </mat-form-field>
   </div>
 </form>

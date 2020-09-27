@@ -33,7 +33,6 @@ export class ConfigFormPage implements OnInit {
   ) {
     this.url = this.activatedRoute.snapshot.paramMap.get('url');
     this.form = this.formGroup.group({
-      sharePhone: new FormControl('', Validators.required),
       shareMsg: new FormControl('', Validators.required),
       title: new FormControl('', Validators.required),
       url: new FormControl('', [Validators.required, this.validatorUrl]),
@@ -114,7 +113,6 @@ export class ConfigFormPage implements OnInit {
     if(this.object.image){
       this.image = {path: this.object.image, new: false};
     }
-    this.form.get('sharePhone').setValue(this.object.sharePhone);
     this.form.get('shareMsg').setValue(this.object.shareMsg);
     this.form.get('title').setValue(this.object.title);
     this.form.get('url').setValue(this.object.url);
@@ -122,16 +120,12 @@ export class ConfigFormPage implements OnInit {
     this.form.get('description').setValue(this.object.description);
   }
 
-  takeImage(event: any) {
+  async takeImage(event: any) {
     const loader = this.utils.loading('Comprimindo imagem...');
-    const reader = new FileReader();
-    reader.addEventListener('load', async (event: any) => {
-      let base64 = event.target.result as string;
-      const compress = await this.utils.uploadCompress(base64);
-      this.image = {path: compress.base64, file: compress.file, new: true};
-      loader.componentInstance.done();
-    });
-    reader.readAsDataURL(event.addedFiles[0]);
+    const compress = await this.utils.uploadCompress(event.addedFiles[0]);
+    this.image = {path: compress.base64, file: compress.file, new: true};
+    loader.componentInstance.msg = 'Imagem comprimida!';
+    loader.componentInstance.done();
   }
 
   async saveImage(id: string) {

@@ -20,13 +20,6 @@
         <mat-header-cell mat-sort-header *matHeaderCellDef> Nome </mat-header-cell>
         <mat-cell matRipple *matCellDef="let element" fxFlexAlign="stretch" (click)="openDetail(element)"> {{ element.name }} </mat-cell>
       </ng-container>
-  
-      <ng-container matColumnDef="text">
-        <mat-header-cell *matHeaderCellDef fxFlex="40"> Texto </mat-header-cell>
-        <mat-cell *matCellDef="let element" fxFlex="40">
-          <span class="truncate"> {{ element.text }} </span>
-        </mat-cell>
-      </ng-container>
 
       <ng-container matColumnDef="config">
         <mat-header-cell mat-sort-header *matHeaderCellDef fxFlex="20"> Website </mat-header-cell>

@@ -95,8 +95,9 @@ export class UtilsService {
     return this.date.transform(value, format);
   }
 
-  uploadCompress(base64: string): Promise<{base64: string, file: Blob}> {
-    return new Promise(resolve => {
+  uploadCompress(file: File): Promise<{base64: string, file: Blob}> {
+    return new Promise(async resolve => {
+      const base64 = await this.readFile(file);
       const orientation = -1;
       this.imageCompress.compressFile(base64, orientation, 50, 50).then(result => {
         // CONVERT BASE64 TO FILE
@@ -109,6 +110,28 @@ export class UtilsService {
         const file = new Blob([int8Array], { type: 'image/png' });
         resolve({base64: result, file: file});
       });
+    });
+  }
+
+  private async readFile(file: File): Promise<string | ArrayBuffer> {
+    return new Promise<string | ArrayBuffer>((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onload = e => {
+        return resolve((e.target as FileReader).result);
+      };
+  
+      reader.onerror = e => {
+        console.error(`FileReader failed on file ${file.name}.`);
+        return reject(null);
+      };
+  
+      if (!file) {
+        console.error('No file to read.');
+        return reject(null);
+      }
+  
+      reader.readAsDataURL(file);
     });
   }
 

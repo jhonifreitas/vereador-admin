@@ -1,6 +1,6 @@
 export class Config {
   image: string;
-  sharePhone: string;
+  imageFeatured: number;
   shareMsg: string;
 
   // WEBSITE

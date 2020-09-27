@@ -29,7 +29,7 @@ export class TabListPage implements OnInit {
   filter: string;
   loading = true;
   dataSource: MatTableDataSource<Tab>;
-  displayedColumns: string[] = ['name', 'text', 'actions'];
+  displayedColumns: string[] = ['name', 'actions'];
 
   constructor(
     private router: Router,
@@ -39,7 +39,7 @@ export class TabListPage implements OnInit {
     private storage: StorageService,
   ) {
     if(this.storage.getUser().superUser){
-      this.displayedColumns.splice(2, 0, 'config');
+      this.displayedColumns.splice(1, 0, 'config');
     }
   }
 
