@@ -1,6 +1,7 @@
 {
   "hosting": {
-    "public": "dist/vereador",
+    "site": "vereador-admin",
+    "public": "dist/vereador-admin",
     "ignore": [
       "firebase.json",
       "**/.*",
