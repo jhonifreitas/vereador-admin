@@ -6,7 +6,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { Config } from 'src/app/models/config';
 import { Global } from 'src/app/models/global';
-import { ConfigFormPage } from '../form/form.component';
 import { ConfigDetailPage } from '../detail/detail.component';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { FBConfigService } from 'src/app/services/firebase/config/config.service';
@@ -30,7 +29,7 @@ export class ConfigListPage implements OnInit {
   filter: string;
   loading = true;
   dataSource: MatTableDataSource<Config>;
-  displayedColumns: string[] = ['title', 'image', 'actions'];
+  displayedColumns: string[] = ['title', 'url', 'image', 'actions'];
 
   constructor(
     private global: Global,
@@ -66,9 +65,9 @@ export class ConfigListPage implements OnInit {
   }
 
   async delete(object: Config) {
-    await this.fbConfig.delete(object.id).then(_ => {
+    await this.fbConfig.delete(object.url).then(_ => {
       this.ngOnInit();
-      this.utils.message('Permissão excluída com sucesso!', 'success');
+      this.utils.message('Configuração excluída com sucesso!', 'success');
     });
   }
 

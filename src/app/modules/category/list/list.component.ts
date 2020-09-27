@@ -9,6 +9,7 @@ import { Category } from 'src/app/models/category';
 import { CategoryFormPage } from '../form/form.component';
 import { CategoryDetailPage } from '../detail/detail.component';
 import { UtilsService } from 'src/app/services/utils/utils.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
 import { FBCategoryService } from 'src/app/services/firebase/category/category.service';
 
 @Component({
@@ -35,8 +36,12 @@ export class CategoryListPage implements OnInit {
     private router: Router,
     private global: Global,
     private utils: UtilsService,
+    private storage: StorageService,
     private fbCategory: FBCategoryService,
   ) {
+    if(this.storage.getUser().superUser){
+      this.displayedColumns.splice(2, 0, 'config');
+    }
   }
 
   ngOnInit(): void {

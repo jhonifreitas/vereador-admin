@@ -2,9 +2,16 @@
 <div mat-dialog-content>
   <form [formGroup]="form">
 
+    <mat-form-field *ngIf="isSuperUser">
+      <mat-label>Website</mat-label>
+      <mat-select formControlName="config">
+        <mat-option *ngFor="let config of configs" [value]="config.url">{{ config.url }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <mat-form-field>
       <mat-label>Nome</mat-label>
-      <input matInput formControlName="name" cdkFocusInitial>
+      <input matInput formControlName="name">
       <mat-error>Nome é <strong>obrigatório!</strong></mat-error>
     </mat-form-field>
 

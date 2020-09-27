@@ -11,6 +11,11 @@
       <div matLine class="info"> {{ object.email }} </div>
     </mat-list-item>
     <mat-list-item>
+      <mat-icon matListIcon>build</mat-icon>
+      <div matLine><strong> Website </strong></div>
+      <div matLine class="info"> {{ object.config }} </div>
+    </mat-list-item>
+    <mat-list-item>
       <mat-icon matListIcon>group</mat-icon>
       <div matLine><strong> Grupos </strong></div>
       <mat-chip-list *ngIf="object._groups">

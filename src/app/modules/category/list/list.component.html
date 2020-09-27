@@ -27,6 +27,11 @@
           <span class="truncate"> {{ element.text }} </span>
         </mat-cell>
       </ng-container>
+
+      <ng-container matColumnDef="config">
+        <mat-header-cell mat-sort-header *matHeaderCellDef fxFlex="20"> Website </mat-header-cell>
+        <mat-cell *matCellDef="let element" fxFlex="20"> {{ element.config }} </mat-cell>
+      </ng-container>
   
       <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef fxFlex="10">  </mat-header-cell>

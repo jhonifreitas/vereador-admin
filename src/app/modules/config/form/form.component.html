@@ -38,11 +38,24 @@
   <!-- WEBSITE -->
   <div id="website" class="container mat-elevation-z8">
     <h2>Website</h2>
-    <mat-form-field>
-      <mat-label>Título</mat-label>
-      <input matInput formControlName="title">
-      <mat-error>Título é <strong>obrigatório!</strong></mat-error>
-    </mat-form-field>
+
+    <div fxLayout="row" fxLayoutGap="20px">
+      <mat-form-field fxFlex="50">
+        <mat-label>Título</mat-label>
+        <input matInput formControlName="title" (keyup)="changeTitle()">
+        <mat-error>Título é <strong>obrigatório!</strong></mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Url</mat-label>
+        <input matInput formControlName="url" (blur)="checkUrl()">
+        <mat-hint>Ex: pedro-josé</mat-hint>
+        <mat-error *ngIf="controlUrl.hasError('exist')">Url já <strong>existente!</strong></mat-error>
+        <mat-error *ngIf="controlUrl.hasError('required')">Url é <strong>obrigatório!</strong></mat-error>
+        <mat-error *ngIf="controlUrl.hasError('hasSpace')">Url não pode conter <strong>espaço!</strong></mat-error>
+        <mat-error *ngIf="controlUrl.hasError('hasUppercase')">Url não pode conter letras <strong>maiúsculas!</strong></mat-error>
+        <mat-error *ngIf="controlUrl.hasError('hasSpecialChar')">Url não pode conter <strong>caractéres especiais!</strong></mat-error>
+      </mat-form-field>
+    </div>
 
     <app-widget-select-tag [control]="form.get('keywords')" placeholder="Palavras chaves"></app-widget-select-tag>
 

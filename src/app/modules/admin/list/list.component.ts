@@ -29,7 +29,7 @@ export class AdminListPage implements OnInit {
   filter: string;
   loading = true;
   dataSource: MatTableDataSource<Admin>;
-  displayedColumns: string[] = ['name', 'email', 'superUser', 'active', 'avatar', 'actions'];
+  displayedColumns: string[] = ['name', 'email', 'config', 'superUser', 'active', 'avatar', 'actions'];
 
   constructor(
     private router: Router,

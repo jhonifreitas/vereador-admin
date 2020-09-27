@@ -29,48 +29,41 @@ export class FBConfigService {
     );
   }
 
-  get(id: string) {
-    return this.db.collection(this.collectionName).doc<Config>(id).get().pipe(
+  get(url: string) {
+    return this.db.collection(this.collectionName).doc<Config>(url).get().pipe(
       map(action => {
         if(action.exists){
-          const data = action.data();
-          if(!data.uid){
-            data.uid = action.id;
-          }
-          return data as Config;
+          return action.data() as Config;
         }
       })
     );
   }
 
-  async create(data: Config) {
-    return await this.db.collection<Config>(this.collectionName).add(data).then(async doc => {
-      await this.update(doc.id, {id: doc.id});
-      return doc;
-    });
+  create(data: Config) {
+    return this.db.collection<Config>(this.collectionName).doc(data.url).set(data);
   }
 
-  update(id: string, data: Partial<Config>) {
-    return this.db.collection(this.collectionName).doc<Config>(id).update(data);
+  update(url: string, data: Partial<Config>) {
+    return this.db.collection(this.collectionName).doc<Config>(url).update(data);
   }
 
-  delete(id: string) {
-    return this.db.collection(this.collectionName).doc<Config>(id).delete();
+  delete(url: string) {
+    return this.db.collection(this.collectionName).doc<Config>(url).delete();
   }
 
   // IMAGE
-  async addImage(id: string, file: Blob){
-    const fileName = id+'.png';
+  async addImage(url: string, file: Blob){
+    const fileName = url+'.png';
     return await this.afStorage.ref(`${this.collectionName}/${fileName}`).put(file).then(async (res) => {
       const url = await res.ref.getDownloadURL();
-      await this.update(id, {image: url});
+      await this.update(url, {image: url});
     });
   }
 
-  async deleteImage(id: string){
-    const path = `${this.collectionName}/${id}`;
+  async deleteImage(url: string){
+    const path = `${this.collectionName}/${url}`;
     return await this.afStorage.ref(path).delete().toPromise().then(async _ => {
-      await this.update(id, {image: null});
+      await this.update(url, {image: null});
     });
   }
 }

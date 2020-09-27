@@ -20,6 +20,11 @@
         <mat-header-cell mat-sort-header *matHeaderCellDef> Título </mat-header-cell>
         <mat-cell matRipple *matCellDef="let element" fxFlexAlign="stretch" (click)="openDetail(element)"> {{ element.title }} </mat-cell>
       </ng-container>
+
+      <ng-container matColumnDef="url">
+        <mat-header-cell mat-sort-header *matHeaderCellDef> Url </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{ element.url }} </mat-cell>
+      </ng-container>
   
       <ng-container matColumnDef="image">
         <mat-header-cell *matHeaderCellDef fxFlex="10" fxLayoutAlign="center center"> Imagem </mat-header-cell>
@@ -31,7 +36,7 @@
       <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef fxFlex="10">  </mat-header-cell>
         <mat-cell *matCellDef="let element" fxFlex="10">
-          <a mat-icon-button color="primary" [href]="'/configuracoes/formulario/'+element.id" *ngIf="canUpdate">
+          <a mat-icon-button color="primary" [href]="'/configuracoes/formulario/'+element.url" *ngIf="canUpdate">
             <mat-icon>edit</mat-icon>
           </a>
           <button mat-icon-button color="warn" (click)="confirmDelete(element)" *ngIf="canDelete">

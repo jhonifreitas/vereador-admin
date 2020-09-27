@@ -2,8 +2,11 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 
+import { Config } from 'src/app/models/config';
 import { Category } from 'src/app/models/category';
 import { UtilsService } from 'src/app/services/utils/utils.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
+import { FBConfigService } from 'src/app/services/firebase/config/config.service';
 import { FBCategoryService } from 'src/app/services/firebase/category/category.service';
 
 @Component({
@@ -15,29 +18,47 @@ export class CategoryFormPage implements OnInit {
 
   saving = false;
   form: FormGroup;
+  configs: Config[];
+  isSuperUser: boolean;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Category,
     private utils: UtilsService,
     private formGroup: FormBuilder,
+    private storage: StorageService,
+    private fbConfig: FBConfigService,
     private fbCategory: FBCategoryService,
     private dialogRef: MatDialogRef<CategoryFormPage>,
   ) {
+    const user = this.storage.getUser();
+    this.isSuperUser = user.superUser;
+    let configValue = user.config || '';
     this.form = this.formGroup.group({
-      page: new FormControl('', Validators.required),
-      role: new FormControl('', Validators.required),
+      config: new FormControl(configValue, Validators.required),
+      name: new FormControl('', Validators.required),
+      text: new FormControl('', Validators.required),
     });
   }
 
   ngOnInit(): void {
+    if(this.isSuperUser){
+      this.getConfigs();
+    }
     if(this.data){
       this.setData();
     }
   }
 
   setData() {
+    this.form.get('config').setValue(this.data.config);
     this.form.get('name').setValue(this.data.name);
     this.form.get('text').setValue(this.data.text);
+  }
+
+  getConfigs() {
+    this.fbConfig.all().subscribe(configs => {
+      this.configs = configs;
+    })
   }
 
   async save() {

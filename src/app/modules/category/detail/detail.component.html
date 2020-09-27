@@ -4,6 +4,11 @@
 <div mat-dialog-content>
   
   <mat-list>
+    <mat-list-item *ngIf="isSuperUser">
+      <mat-icon matListIcon>build</mat-icon>
+      <div matLine><strong> Website </strong></div>
+      <div matLine class="info"> {{ object.config }} </div>
+    </mat-list-item>
     <mat-list-item>
       <mat-icon matListIcon>more_horiz</mat-icon>
       <div matLine><strong> Nome </strong></div>
