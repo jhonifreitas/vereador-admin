@@ -100,16 +100,12 @@ export class AdminFormPage implements OnInit {
     })
   }
 
-  takeImage(event: any) {
+  async takeImage(event: any) {
     const loader = this.utils.loading('Comprimindo imagem...');
-    const reader = new FileReader();
-    reader.addEventListener('load', async (event: any) => {
-      let base64 = event.target.result as string;
-      const compress = await this.utils.uploadCompress(base64);
-      this.image = {path: compress.base64, file: compress.file, new: true};
-      loader.componentInstance.done();
-    });
-    reader.readAsDataURL(event.addedFiles[0]);
+    const compress = await this.utils.uploadCompress(event.addedFiles[0]);
+    this.image = {path: compress.base64, file: compress.file, new: true};
+    loader.componentInstance.msg = 'Imagem comprimida!';
+    loader.componentInstance.done();
   }
 
   async saveImage(id: string){
