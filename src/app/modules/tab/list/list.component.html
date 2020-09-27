@@ -1,11 +1,11 @@
 <div class="header" fxLayout="row" fxLayoutAlign="end center">
   <div fxFlex="50" fxFlex.gt-md="80">
-    <h2 class="title">Categorias</h2>
+    <h2 class="title">Abas</h2>
   </div>
   <mat-form-field fxFlex="50" fxFlex.gt-md="20">
     <mat-icon matPrefix>search</mat-icon>
     <mat-label>Pesquisar</mat-label>
-    <input matInput [(ngModel)]="filter" name="filter" (keyup)="applyFilter()" placeholder="Ex. Categoria...">
+    <input matInput [(ngModel)]="filter" name="filter" (keyup)="applyFilter()" placeholder="Ex. Tab...">
     <button mat-button matSuffix mat-icon-button *ngIf="filter" (click)="filter=''">
       <mat-icon>close</mat-icon>
     </button>
@@ -20,6 +20,13 @@
         <mat-header-cell mat-sort-header *matHeaderCellDef> Nome </mat-header-cell>
         <mat-cell matRipple *matCellDef="let element" fxFlexAlign="stretch" (click)="openDetail(element)"> {{ element.name }} </mat-cell>
       </ng-container>
+  
+      <ng-container matColumnDef="text">
+        <mat-header-cell *matHeaderCellDef fxFlex="40"> Texto </mat-header-cell>
+        <mat-cell *matCellDef="let element" fxFlex="40">
+          <span class="truncate"> {{ element.text }} </span>
+        </mat-cell>
+      </ng-container>
 
       <ng-container matColumnDef="config">
         <mat-header-cell mat-sort-header *matHeaderCellDef fxFlex="20"> Website </mat-header-cell>
@@ -29,7 +36,7 @@
       <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef fxFlex="10">  </mat-header-cell>
         <mat-cell *matCellDef="let element" fxFlex="10">
-          <a mat-icon-button color="primary" [href]="'/categorias/formulario/'+element.id" *ngIf="canUpdate">
+          <a mat-icon-button color="primary" [href]="'/abas/formulario/'+element.id" *ngIf="canUpdate">
             <mat-icon>edit</mat-icon>
           </a>
           <button mat-icon-button color="warn" (click)="confirmDelete(element)" *ngIf="canDelete">
@@ -52,6 +59,6 @@
   <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
 </div>
 
-<a mat-fab color="primary" class="fab-bottom-right" href="categorias/formulario" *ngIf="canAdd">
+<a mat-fab color="primary" class="fab-bottom-right" href="abas/formulario" *ngIf="canAdd">
   <mat-icon>add</mat-icon>
 </a>

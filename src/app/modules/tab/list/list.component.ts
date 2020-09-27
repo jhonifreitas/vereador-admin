@@ -4,47 +4,51 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { Group } from 'src/app/models/group';
-import { GroupFormPage } from '../form/form.component';
-import { GroupDetailPage } from '../detail/detail.component';
+import { Tab } from 'src/app/models/tab';
+import { Global } from 'src/app/models/global';
+import { TabDetailPage } from '../detail/detail.component';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
-import { FBGroupService } from 'src/app/services/firebase/group/group.service';
+import { FBTabService } from 'src/app/services/firebase/tab/tab.service';
 
 @Component({
-  selector: 'app-group-list',
+  selector: 'app-tab-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class GroupListPage implements OnInit {
+export class TabListPage implements OnInit {
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  canView = this.storage.getUser().superUser;
-  canAdd = this.storage.getUser().superUser;
-  canUpdate = this.storage.getUser().superUser;
-  canDelete = this.storage.getUser().superUser;
+  canView = this.global.hasPermission('tab', 'can-view');
+  canAdd = this.global.hasPermission('tab', 'can-add');
+  canUpdate = this.global.hasPermission('tab', 'can-update');
+  canDelete = this.global.hasPermission('tab', 'can-delete');
 
   filter: string;
   loading = true;
-  dataSource: MatTableDataSource<Group>;
-  displayedColumns: string[] = ['name', 'actions'];
+  dataSource: MatTableDataSource<Tab>;
+  displayedColumns: string[] = ['name', 'text', 'actions'];
 
   constructor(
     private router: Router,
+    private global: Global,
     private utils: UtilsService,
+    private fbTab: FBTabService,
     private storage: StorageService,
-    private fbGroup: FBGroupService,
   ) {
+    if(this.storage.getUser().superUser){
+      this.displayedColumns.splice(2, 0, 'config');
+    }
   }
 
   ngOnInit(): void {
-    if(!this.storage.getUser().superUser){
+    if(!this.global.hasPermission('tab', 'can-list')){
       this.router.navigate(['/error/403']);
     }
-    this.fbGroup.all().subscribe(groups => {
-      this.dataSource = new MatTableDataSource<Group>(groups);
+    this.fbTab.all().subscribe(tabs => {
+      this.dataSource = new MatTableDataSource<Tab>(tabs);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.loading = false;
@@ -55,26 +59,20 @@ export class GroupListPage implements OnInit {
     this.dataSource.filter = this.filter.trim().toLowerCase();
   }
 
-  openDetail(object?: Group) {
+  openDetail(object?: Tab) {
     if(this.canView){
-      this.utils.detail(GroupDetailPage, object);
+      this.utils.detail(TabDetailPage, object);
     }
   }
 
-  openForm(object?: Group) {
-    this.utils.form(GroupFormPage, object).then(_ => {
+  async delete(object: Tab) {
+    await this.fbTab.delete(object.id).then(_ => {
       this.ngOnInit();
+      this.utils.message('Aba excluída com sucesso!', 'success');
     });
   }
 
-  async delete(object: Group) {
-    await this.fbGroup.delete(object.id).then(_ => {
-      this.ngOnInit();
-      this.utils.message('Grupo excluído com sucesso!', 'success');
-    });
-  }
-
-  confirmDelete(object: Group) {
+  confirmDelete(object: Tab) {
     this.utils.delete().then(async _ => {
       this.delete(object);
     }).catch(_ => {})

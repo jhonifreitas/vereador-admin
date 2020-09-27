@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-  <span>Categoria</span>
+  <span>Social</span>
 </mat-toolbar>
 <div mat-dialog-content>
   
@@ -11,13 +11,13 @@
     </mat-list-item>
     <mat-list-item>
       <mat-icon matListIcon>more_horiz</mat-icon>
-      <div matLine><strong> Nome </strong></div>
-      <div matLine class="info"> {{ object.name }} </div>
+      <div matLine><strong> Tipo </strong></div>
+      <div matLine class="info"> {{ object.type }} </div>
     </mat-list-item>
-
-    <div class="text">
-      <strong> Texto </strong>
-      <div [innerHtml]="object.text"></div>
-    </div>
+    <mat-list-item>
+      <mat-icon matListIcon>link</mat-icon>
+      <div matLine><strong> Url </strong></div>
+      <div matLine class="info"> {{ object.url }} </div>
+    </mat-list-item>
   </mat-list>
 </div>

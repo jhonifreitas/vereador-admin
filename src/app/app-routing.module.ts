@@ -3,13 +3,17 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from './guards/auth/auth.guard';
 import { AuthFormPage } from './modules/auth/auth.component';
+import { TabListPage } from './modules/tab/list/list.component';
+import { TabFormPage } from './modules/tab/form/form.component';
 import { DefaultLayout } from './layouts/default/default.component';
 import { AdminListPage } from './modules/admin/list/list.component';
 import { GroupListPage } from './modules/group/list/list.component';
-import { ConfigListPage} from './modules/config/list/list.component';
-import { ConfigFormPage} from './modules/config/form/form.component';
-import { DashboardPage} from './modules/dashboard/dashboard.component';
+import { ConfigListPage } from './modules/config/list/list.component';
+import { SocialListPage } from './modules/social/list/list.component';
+import { ConfigFormPage } from './modules/config/form/form.component';
+import { DashboardPage } from './modules/dashboard/dashboard.component';
 import { CategoryListPage } from './modules/category/list/list.component';
+import { CategoryFormPage } from './modules/category/form/form.component';
 import { PermissionListPage } from './modules/permission/list/list.component';
 
 const routes: Routes = [
@@ -17,7 +21,17 @@ const routes: Routes = [
 
   { path: '', canActivate: [AuthGuard], component: DefaultLayout, children: [
     { path: '', component: DashboardPage },
-    { path: 'categorias', component: CategoryListPage },
+    { path: 'sociais', component: SocialListPage },
+    { path: 'abas', children: [
+      { path: '', component: TabListPage },
+      { path: 'formulario', component: TabFormPage },
+      { path: 'formulario/:id', component: TabFormPage },
+    ]},
+    { path: 'categorias', children: [
+      { path: '', component: CategoryListPage },
+      { path: 'formulario', component: CategoryFormPage },
+      { path: 'formulario/:id', component: CategoryFormPage },
+    ]},
     { path: 'configuracoes', children: [
       { path: '', component: ConfigListPage },
       { path: 'formulario', component: ConfigFormPage },

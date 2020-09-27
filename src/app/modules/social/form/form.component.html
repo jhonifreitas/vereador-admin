@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>Formulário de social</h1>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+
+    <mat-form-field *ngIf="isSuperUser">
+      <mat-label>Website</mat-label>
+      <mat-select formControlName="config">
+        <mat-option *ngFor="let config of configs" [value]="config.url">{{ config.url }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Tipo</mat-label>
+      <mat-select formControlName="type">
+        <mat-option *ngFor="let type of types" [value]="type.value">{{ type.name }}</mat-option>
+      </mat-select>
+      <mat-error>Tipo é <strong>obrigatório!</strong></mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Url</mat-label>
+      <input matInput type="url" formControlName="url">
+      <mat-error *ngIf="url.hasError('required')">Url é <strong>obrigatório!</strong></mat-error>
+      <mat-error *ngIf="url.hasError('pattern')">Url <strong>inválido!</strong></mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions fxLayoutAlign="end center">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="form.invalid" *ngIf="!saving" (click)="save()">Salvar</button>
+  <mat-progress-spinner mode="indeterminate" diameter="25" *ngIf="saving"></mat-progress-spinner>
+</div>

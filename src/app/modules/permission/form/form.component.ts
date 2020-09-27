@@ -17,6 +17,10 @@ export class PermissionFormPage implements OnInit {
   form: FormGroup;
   pages = [
     {value: 'dashboard', name: 'Dashboard'},
+    {value: 'tab', name: 'Aba'},
+    {value: 'category', name: 'Categoria'},
+    {value: 'social', name: 'Social'},
+    {value: 'configuration', name: 'Configuração'},
   ];
   roles = [
     {value: 'can-list', name: 'Pode visualizar listagem'},

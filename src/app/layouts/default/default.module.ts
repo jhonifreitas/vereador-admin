@@ -39,6 +39,14 @@ import { LoadingDialog } from 'src/app/shared/components/loading/loading.compone
 import { CategoryListPage } from 'src/app/modules/category/list/list.component';
 import { CategoryFormPage } from 'src/app/modules/category/form/form.component';
 import { CategoryDetailPage } from 'src/app/modules/category/detail/detail.component';
+// TAB
+import { TabListPage } from 'src/app/modules/tab/list/list.component';
+import { TabFormPage } from 'src/app/modules/tab/form/form.component';
+import { TabDetailPage } from 'src/app/modules/tab/detail/detail.component';
+// SOCIAL
+import { SocialListPage } from 'src/app/modules/social/list/list.component';
+import { SocialFormPage } from 'src/app/modules/social/form/form.component';
+import { SocialDetailPage } from 'src/app/modules/social/detail/detail.component';
 // CONFIG
 import { ConfigListPage } from 'src/app/modules/config/list/list.component';
 import { ConfigFormPage } from 'src/app/modules/config/form/form.component';
@@ -60,8 +68,8 @@ import { PermissionDetailPage } from 'src/app/modules/permission/detail/detail.c
 import { NgxMaskModule } from 'ngx-mask';
 // DROPZONE
 import { NgxDropzoneModule } from 'ngx-dropzone';
-// CKEDITOR
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+// QUILL
+import { QuillModule } from 'ngx-quill';
 // COMPRESS
 import { NgxImageCompressService } from 'ngx-image-compress';
 // SELECT FILTER
@@ -78,7 +86,10 @@ import { translateMatPaginator } from 'src/app/services/localization/localizatio
 
 @NgModule({
   declarations: [
+    TabListPage,
+    TabFormPage,
     DeleteDialog,
+    TabDetailPage,
     DefaultLayout,
     LoadingDialog,
     AdminListPage,
@@ -86,10 +97,13 @@ import { translateMatPaginator } from 'src/app/services/localization/localizatio
     GroupListPage,
     GroupFormPage,
     DashboardPage,
+    SocialListPage,
+    SocialFormPage,
     ConfigFormPage,
     ConfigListPage,
     AdminDetailPage,
     GroupDetailPage,
+    SocialDetailPage,
     ConfigDetailPage,
     CategoryListPage,
     CategoryFormPage,
@@ -110,7 +124,6 @@ import { translateMatPaginator } from 'src/app/services/localization/localizatio
     MatTableModule,
     DragDropModule,
     MatInputModule,
-    CKEditorModule,
     MatChipsModule,
     MatButtonModule,
     MatDialogModule,
@@ -131,6 +144,7 @@ import { translateMatPaginator } from 'src/app/services/localization/localizatio
     MatSlideToggleModule,
     MatSelectFilterModule,
     MatAutocompleteModule,
+    QuillModule.forRoot(),
     NgxMaskModule.forRoot(),
     MatProgressSpinnerModule,
     LottieModule.forRoot({player: playerFactory, useCache: true})

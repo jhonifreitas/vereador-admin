@@ -43,7 +43,9 @@ export class ConfigFormPage implements OnInit {
   }
 
   ngOnInit(): void {
-    if(!this.global.hasPermission('configuration', 'can-update')){
+    if(!this.url && !this.global.hasPermission('configuration', 'can-add')){
+      this.router.navigate(['/error/403']);
+    }else if(this.url && !this.global.hasPermission('configuration', 'can-update')){
       this.router.navigate(['/error/403']);
     }
 

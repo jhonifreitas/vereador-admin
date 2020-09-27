@@ -4,51 +4,52 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
+import { Social } from 'src/app/models/social';
 import { Global } from 'src/app/models/global';
-import { Category } from 'src/app/models/category';
-import { CategoryDetailPage } from '../detail/detail.component';
+import { SocialFormPage } from '../form/form.component';
+import { SocialDetailPage } from '../detail/detail.component';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
-import { FBCategoryService } from 'src/app/services/firebase/category/category.service';
+import { FBSocialService } from 'src/app/services/firebase/social/social.service';
 
 @Component({
-  selector: 'app-category-list',
+  selector: 'app-social-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class CategoryListPage implements OnInit {
+export class SocialListPage implements OnInit {
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  canView = this.global.hasPermission('category', 'can-view');
-  canAdd = this.global.hasPermission('category', 'can-add');
-  canUpdate = this.global.hasPermission('category', 'can-update');
-  canDelete = this.global.hasPermission('category', 'can-delete');
+  canView = this.global.hasPermission('social', 'can-view');
+  canAdd = this.global.hasPermission('social', 'can-add');
+  canUpdate = this.global.hasPermission('social', 'can-update');
+  canDelete = this.global.hasPermission('social', 'can-delete');
 
   filter: string;
   loading = true;
-  dataSource: MatTableDataSource<Category>;
-  displayedColumns: string[] = ['name', 'actions'];
+  dataSource: MatTableDataSource<Social>;
+  displayedColumns: string[] = ['type', 'url', 'actions'];
 
   constructor(
     private router: Router,
     private global: Global,
     private utils: UtilsService,
+    private fbSocial: FBSocialService,
     private storage: StorageService,
-    private fbCategory: FBCategoryService,
   ) {
     if(this.storage.getUser().superUser){
-      this.displayedColumns.splice(1, 0, 'config');
+      this.displayedColumns.splice(2, 0, 'config');
     }
   }
 
   ngOnInit(): void {
-    if(!this.global.hasPermission('category', 'can-list')){
+    if(!this.global.hasPermission('social', 'can-list')){
       this.router.navigate(['/error/403']);
     }
-    this.fbCategory.all().subscribe(categories => {
-      this.dataSource = new MatTableDataSource<Category>(categories);
+    this.fbSocial.all().subscribe(socials => {
+      this.dataSource = new MatTableDataSource<Social>(socials);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.loading = false;
@@ -59,20 +60,26 @@ export class CategoryListPage implements OnInit {
     this.dataSource.filter = this.filter.trim().toLowerCase();
   }
 
-  openDetail(object?: Category) {
+  openDetail(object?: Social) {
     if(this.canView){
-      this.utils.detail(CategoryDetailPage, object);
+      this.utils.detail(SocialDetailPage, object);
     }
   }
 
-  async delete(object: Category) {
-    await this.fbCategory.delete(object.id).then(_ => {
+  openForm(object?: Social) {
+    this.utils.form(SocialFormPage, object).then(_ => {
       this.ngOnInit();
-      this.utils.message('Categoria excluída com sucesso!', 'success');
     });
   }
 
-  confirmDelete(object: Category) {
+  async delete(object: Social) {
+    await this.fbSocial.delete(object.id).then(_ => {
+      this.ngOnInit();
+      this.utils.message('Aba excluída com sucesso!', 'success');
+    });
+  }
+
+  confirmDelete(object: Social) {
     this.utils.delete().then(async _ => {
       this.delete(object);
     }).catch(_ => {})
