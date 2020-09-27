@@ -1,0 +1,16 @@
+#map {
+  height: 50vh;
+  position: relative;
+  .map {height: 100%;}
+  ng-lottie{
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    background: #fff;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+  }
+}
