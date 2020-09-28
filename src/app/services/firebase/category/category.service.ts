@@ -28,6 +28,18 @@ export class FBCategoryService {
     );
   }
 
+  getByUrl(configUrl: string) {
+    return this.db.collection(this.collectionName, ref => ref.where('config', '==', configUrl)).get().pipe(
+      map(actions => {
+        return actions.docs.map(doc => {
+          if(doc.exists){
+            return doc.data() as Category;
+          }
+        })
+      })
+    );
+  }
+
   get(id: string) {
     return this.db.collection(this.collectionName).doc<Category>(id).get().pipe(
       map(action => {

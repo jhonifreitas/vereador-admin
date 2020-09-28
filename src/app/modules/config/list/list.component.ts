@@ -42,10 +42,10 @@ export class ConfigListPage implements OnInit {
 
   ngOnInit(): void {
     const user = this.storage.getUser();
-    if(!this.global.hasPermission('configuration', 'can-list')){
-      this.router.navigate(['/error/403']);
-    } else if (!user.superUser && user.config) {
+    if (this.global.hasPermission('configuration', 'can-view') && !user.superUser && user.config) {
       this.router.navigateByUrl(`configuracoes/formulario/${user.config}`);
+    } else if(!this.global.hasPermission('configuration', 'can-list')){
+      this.router.navigate(['/error/403']);
     }
     this.fbConfig.all().subscribe(configs => {
       this.dataSource = new MatTableDataSource<Config>(configs);

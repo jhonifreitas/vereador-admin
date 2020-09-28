@@ -47,12 +47,21 @@ export class TabListPage implements OnInit {
     if(!this.global.hasPermission('tab', 'can-list')){
       this.router.navigate(['/error/403']);
     }
-    this.fbTab.all().subscribe(tabs => {
-      this.dataSource = new MatTableDataSource<Tab>(tabs);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-      this.loading = false;
-    });
+    if(this.storage.getUser().superUser){
+      this.fbTab.all().subscribe(tabs => {
+        this.dataSource = new MatTableDataSource<Tab>(tabs);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.loading = false;
+      });
+    }else{
+      this.fbTab.getByUrl(this.storage.getUser().config).subscribe(tabs => {
+        this.dataSource = new MatTableDataSource<Tab>(tabs);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.loading = false;
+      });
+    }
   }
 
   applyFilter() {

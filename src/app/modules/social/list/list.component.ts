@@ -48,12 +48,21 @@ export class SocialListPage implements OnInit {
     if(!this.global.hasPermission('social', 'can-list')){
       this.router.navigate(['/error/403']);
     }
-    this.fbSocial.all().subscribe(socials => {
-      this.dataSource = new MatTableDataSource<Social>(socials);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-      this.loading = false;
-    });
+    if(this.storage.getUser().superUser){
+      this.fbSocial.all().subscribe(socials => {
+        this.dataSource = new MatTableDataSource<Social>(socials);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.loading = false;
+      });
+    }else{
+      this.fbSocial.getByUrl(this.storage.getUser().config).subscribe(socials => {
+        this.dataSource = new MatTableDataSource<Social>(socials);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.loading = false;
+      });
+    }
   }
 
   applyFilter() {

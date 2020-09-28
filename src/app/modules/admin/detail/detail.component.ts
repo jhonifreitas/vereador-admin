@@ -20,7 +20,7 @@ export class AdminDetailPage implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    for(const groupId of this.object.permissions){
+    for(const groupId of this.object.groups){
       this.object._groups = [];
       this.fbGroup.get(groupId).subscribe(group => {
         this.object._groups.push(group);

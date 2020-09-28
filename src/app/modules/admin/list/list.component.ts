@@ -62,7 +62,11 @@ export class AdminListPage implements OnInit {
   }
 
   openForm(object?: Admin) {
-    this.utils.form(AdminFormPage, object);
+    this.utils.form(AdminFormPage, object).then(res => {
+      if(res){
+        this.ngOnInit();
+      }
+    });
   }
 
   async delete(object: Admin) {

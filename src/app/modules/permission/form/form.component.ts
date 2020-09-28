@@ -26,7 +26,7 @@ export class PermissionFormPage implements OnInit {
     {value: 'can-list', name: 'Pode visualizar listagem'},
     {value: 'can-add', name: 'Pode salvar'},
     {value: 'can-update', name: 'Pode editar'},
-    {value: 'can-delete', name: 'Pode editar'},
+    {value: 'can-delete', name: 'Pode deletar'},
     {value: 'can-view', name: 'Pode visualizar'},
   ];
 

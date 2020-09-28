@@ -90,7 +90,7 @@ export class DashboardPage implements OnInit {
         const marker: Marker = {
           ip: analytic.ip,
           lat: access.lat,
-          lng: access.lat,
+          lng: access.long,
           color: 'primary'
         };
         this.addMarker(marker);

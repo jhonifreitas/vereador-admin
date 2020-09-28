@@ -9,12 +9,11 @@
       <div matLine><strong> Name </strong></div>
       <div matLine class="info"> {{ object.name }} </div>
     </mat-list-item>
-    <mat-list-item>
-      <mat-icon matListIcon>lock</mat-icon>
+    <div class="item">
       <div matLine><strong> Permissões </strong></div>
       <mat-chip-list>
         <mat-chip *ngFor="let permission of object._permissions" color="primary" selected>{{ permission.page }} - {{ permission.role }}</mat-chip>
       </mat-chip-list>
-    </mat-list-item>
+    </div>
   </mat-list>
 </div>

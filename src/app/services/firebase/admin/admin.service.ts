@@ -24,7 +24,11 @@ export class FBAdminService {
       map(actions => {
         return actions.docs.map(doc => {
           if(doc.exists){
-            return doc.data() as Admin;
+            const data = doc.data();
+            if(!data.uid){
+              data.uid = doc.id;
+            }
+            return data as Admin;
           }
         })
       })
@@ -68,10 +72,12 @@ export class FBAdminService {
       const param = {
         uid: id,
         email: data.email,
+        password: data.password,
         disabled: !data.active
       }
 
       await getUser({uid: id}).toPromise().then(async user => {
+        delete param.password;
         const updateUser = this.functions.httpsCallable('updateUser');
         await updateUser(param).toPromise();
       }).catch(async _ => {

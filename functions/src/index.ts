@@ -68,15 +68,19 @@ exports.createUser = functions.https.onCall(data => {
 exports.updateUser = functions.https.onCall(data => {
   const { uid, email, password, disabled } = data;
 
-  if(!uid || !email || !password){
+  if(!uid || !email){
     throw new functions.https.HttpsError('invalid-argument', 'Parameters invalid!');
   }
 
-  return admin.auth().updateUser(uid, {
+  const updateData: {email: string; disabled: boolean; password?: any;} = {
     email: email,
-    password: password,
     disabled: disabled
-  }).then(userRecord => {
+  };
+  if(password){
+    updateData.password = password;
+  }
+
+  return admin.auth().updateUser(uid, updateData).then(userRecord => {
     const result = {
       status: 'Updated',
       msg: `Successfully updated user: ${userRecord.uid}`

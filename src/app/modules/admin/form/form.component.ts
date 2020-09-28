@@ -44,6 +44,8 @@ export class AdminFormPage implements OnInit {
       permissions: new FormControl(''),
       password: new FormControl(''),
       confirmPass: new FormControl(''),
+      superUser: new FormControl(false),
+      active: new FormControl(true),
     }, {validators: !this.data ? this.validatorPassword : null});
   }
 
@@ -54,18 +56,25 @@ export class AdminFormPage implements OnInit {
     if(this.data){
       this.setData();
     }else{
-      this.form.get('password').setValidators(Validators.required);
-      this.form.get('confirmPass').setValidators(Validators.required);
+      this.form.get('password').setValidators([Validators.required, Validators.minLength(6)]);
+      this.form.get('confirmPass').setValidators([Validators.required, Validators.minLength(6)]);
     }
   }
 
   validatorPassword(group: FormGroup) {
     const password = group.get('password').value;
     const confirmControl = group.get('confirmPass');
-    const required = confirmControl.value ? false : true;
-    const result = {passNotSame: false, required: required};
-    if(password != confirmControl.value){
-      result.passNotSame = true;
+    let result: {
+      required?: boolean;
+      passNotSame?: boolean;
+      minlength?: {actualLength: number; requiredLength: number};
+    } = null;
+    if(confirmControl.hasError('required')){
+      result = {required: true};
+    }else if(confirmControl.hasError('minlength')){
+      result = {minlength: confirmControl.errors.minlength};
+    }else if(password != confirmControl.value){
+      result = {passNotSame: true};
     }
     confirmControl.setErrors(result);
     return {};
@@ -80,6 +89,8 @@ export class AdminFormPage implements OnInit {
     this.form.get('config').setValue(this.data.config);
     this.form.get('groups').setValue(this.data.groups);
     this.form.get('permissions').setValue(this.data.permissions);
+    this.form.get('superUser').setValue(this.data.superUser);
+    this.form.get('active').setValue(this.data.active);
   }
 
   getConfigs() {
@@ -130,8 +141,10 @@ export class AdminFormPage implements OnInit {
       this.saving = true;
       const data = this.form.value;
       delete data.confirmPass;
+      for (const field in data) {
+        if(!data[field] && data[field] != false){data[field] = null}
+      }
       if(this.data && this.data.uid){
-        delete data.password;
         await this.fbAdmin.update(this.data.uid, data);
         await this.saveImage(this.data.uid);
       }else{
@@ -141,7 +154,7 @@ export class AdminFormPage implements OnInit {
       }
       this.saving = false;
       this.utils.message('Usuário salvo com sucesso!', 'success');
-      this.dialogRef.close();
+      this.dialogRef.close(true);
     }else{
       this.utils.message('Verifique os dados antes de salvar!', 'warn');
     }

@@ -159,7 +159,7 @@ export class ConfigFormPage implements OnInit {
         await this.fbConfig.create(data);
         await this.saveImage(data.url);
         if(this.url){
-          this.fbConfig.delete(this.url);
+          await this.fbConfig.delete(this.url);
         }
       }
       this.saving = false;

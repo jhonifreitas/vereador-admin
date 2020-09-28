@@ -47,12 +47,21 @@ export class CategoryListPage implements OnInit {
     if(!this.global.hasPermission('category', 'can-list')){
       this.router.navigate(['/error/403']);
     }
-    this.fbCategory.all().subscribe(categories => {
-      this.dataSource = new MatTableDataSource<Category>(categories);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-      this.loading = false;
-    });
+    if(this.storage.getUser().superUser){
+      this.fbCategory.all().subscribe(categories => {
+        this.dataSource = new MatTableDataSource<Category>(categories);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.loading = false;
+      });
+    }else{
+      this.fbCategory.getByUrl(this.storage.getUser().config).subscribe(categories => {
+        this.dataSource = new MatTableDataSource<Category>(categories);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.loading = false;
+      });
+    }
   }
 
   applyFilter() {
