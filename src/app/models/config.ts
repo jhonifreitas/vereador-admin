@@ -8,4 +8,5 @@ export class Config {
   url: string;
   keywords: string[];
   description: string;
+  donation: string;
 }

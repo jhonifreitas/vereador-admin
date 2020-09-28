@@ -21,6 +21,7 @@ export class ConfigFormPage implements OnInit {
   saving = false;
   form: FormGroup;
   image: {path: string; new: boolean, file?: Blob;};
+  private donationMsg = 'Olá, abaixo nossos dados Bancários para nos ajudar:\n\nNome Completo:\nCNPJ:\nBanco:\nAgência:\nConta:';
 
   constructor(
     private global: Global,
@@ -38,6 +39,7 @@ export class ConfigFormPage implements OnInit {
       url: new FormControl('', [Validators.required, this.validatorUrl]),
       keywords: new FormControl([], Validators.required),
       description: new FormControl('', Validators.required),
+      donation: new FormControl(this.donationMsg, Validators.required),
     });
   }
 
@@ -118,6 +120,7 @@ export class ConfigFormPage implements OnInit {
     this.form.get('url').setValue(this.object.url);
     this.form.get('keywords').setValue(this.object.keywords);
     this.form.get('description').setValue(this.object.description);
+    this.form.get('donation').setValue(this.object.donation || this.donationMsg);
   }
 
   async takeImage(event: any) {
@@ -160,7 +163,7 @@ export class ConfigFormPage implements OnInit {
         }
       }
       this.saving = false;
-      if(!this.storage.getUser().config){
+      if(this.storage.getUser().superUser){
         this.router.navigateByUrl('/configuracoes');
       }
       this.utils.message('Configuração salva com sucesso!', 'success');
