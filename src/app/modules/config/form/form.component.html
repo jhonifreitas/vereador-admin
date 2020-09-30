@@ -15,7 +15,16 @@
       </ngx-dropzone>
     </div>
     <div id="previewShare" fxFlex.gt-sm="40" fxFlexOffset.gt-sm="2" class="container">
-      <h2>Visualização</h2>
+      <div fxLayout="row">
+        <div fxFlex>
+          <h2>Visualização</h2>
+        </div>
+        <div fxFlex="none">
+          <button mat-mini-fab color="success" *ngIf="controlUrl.value && form.get('shareMsg').value" (click)="shareWhatsapp()">
+            <mat-icon fontSet="fab" fontIcon="fa-whatsapp"></mat-icon>
+          </button>
+        </div>
+      </div>
       <mat-card class="whatsapp mat-elevation-z8">
         <div class="header" fxLayout="row" fxLayoutAlign="center center">
           <div class="image" *ngIf="image">

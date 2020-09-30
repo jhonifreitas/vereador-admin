@@ -4,9 +4,10 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 
 import { Global } from 'src/app/models/global';
 import { Config } from 'src/app/models/config';
+import { environment } from 'src/environments/environment';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { FBConfigService } from 'src/app/services/firebase/config/config.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
+import { FBConfigService } from 'src/app/services/firebase/config/config.service';
 
 @Component({
   selector: 'app-config-form',
@@ -154,6 +155,13 @@ export class ConfigFormPage implements OnInit {
     }else{
       this.image = null;
     }
+  }
+
+  shareWhatsapp() {
+    let msg = this.form.get('shareMsg').value.replace(/\n/gm, '%0a');
+    msg += `%0a%0a`;
+    msg += `${environment.host}/${this.controlUrl.value}`;
+    window.open(`whatsapp://send?text=${msg}`);
   }
 
   async save() {

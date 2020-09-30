@@ -11,6 +11,10 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 
+// LOTTIE
+import { LottieModule } from 'ngx-lottie';
+export function playerFactory() {return import('lottie-web/build/player/lottie_light');}
+
 // DEFAULT
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -35,6 +39,7 @@ registerLocaleData(localePt);
     AngularFireStorageModule,
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(environment.firebase),
+    LottieModule.forRoot({player: playerFactory, useCache: true})
   ],
   providers: [
     DatePipe,

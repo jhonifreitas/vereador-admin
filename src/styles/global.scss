@@ -138,3 +138,10 @@ snack-bar-container {
     .mat-simple-snackbar-action {color: mat-color($warn, default-contrast);}
   }
 }
+
+.mat-button-base{
+  &.mat-success {
+    color: mat-color($success, default-contrast);
+    background: mat-color($success);
+  }
+}

@@ -6,11 +6,11 @@ import { AnimationOptions } from 'ngx-lottie';
 import { Admin } from 'src/app/models/admin';
 import { Global } from 'src/app/models/global';
 import { Marker } from 'src/app/models/marker';
+import { Access, Analytics } from 'src/app/models/analytics';
 
 import { StorageService } from 'src/app/services/storage/storage.service';
 import createHTMLMapMarker from "src/app/services/google-maps/html-map-marker";
 import { FBAnalyticsService } from 'src/app/services/firebase/analytics/analytics.service';
-import { Access, Analytics } from 'src/app/models/analytics';
 
 declare var google: any;
 

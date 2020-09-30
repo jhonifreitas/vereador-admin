@@ -19,12 +19,12 @@ export class AuthGuard implements CanActivate {
   ){ }
 
   canActivate(): Observable<boolean> | Promise<boolean> | boolean {
-    return new Promise(resolve => {
-      this.auth.onAuthStateChanged(user => {
+    return new Promise(async resolve => {
+      await this.auth.onAuthStateChanged(user => {
         if (user) {
-          this.fbAdmin.get(user.uid).subscribe(admin => {
+          this.fbAdmin.get(user.uid).subscribe(async admin => {
             if(admin){
-              this.storage.setUser(admin);
+              await this.storage.setUser(admin);
               resolve(true);
             }else{
               this.auth.signOut();
