@@ -19,8 +19,8 @@ export class FBAnalyticsService {
     return this.db.collection<Analytics>(this.collectionName).valueChanges();
   }
 
-  getByURL(configUrl: string) {
-    return this.db.collection<Analytics>(this.collectionName, ref => ref.where('config', '==', configUrl)).valueChanges();
+  getByConfig(configId: string) {
+    return this.db.collection<Analytics>(this.collectionName, ref => ref.where('config', '==', configId)).valueChanges();
   }
 
   get(ip: string): Promise<Analytics> {

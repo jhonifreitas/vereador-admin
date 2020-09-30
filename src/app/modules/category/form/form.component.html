@@ -4,7 +4,7 @@
     <mat-form-field *ngIf="isSuperUser">
       <mat-label>Website</mat-label>
       <mat-select formControlName="config">
-        <mat-option *ngFor="let config of configs" [value]="config.url">{{ config.url }}</mat-option>
+        <mat-option *ngFor="let config of configs" [value]="config.id">{{ config.url }}</mat-option>
       </mat-select>
     </mat-form-field>
 

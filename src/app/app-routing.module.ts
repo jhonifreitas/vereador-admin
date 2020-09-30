@@ -35,7 +35,7 @@ const routes: Routes = [
     { path: 'configuracoes', children: [
       { path: '', component: ConfigListPage },
       { path: 'formulario', component: ConfigFormPage },
-      { path: 'formulario/:url', component: ConfigFormPage },
+      { path: 'formulario/:id', component: ConfigFormPage },
     ]},
     { path: 'auth', children: [
       { path: 'grupos', component: GroupListPage },

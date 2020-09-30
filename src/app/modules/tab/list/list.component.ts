@@ -8,8 +8,9 @@ import { Tab } from 'src/app/models/tab';
 import { Global } from 'src/app/models/global';
 import { TabDetailPage } from '../detail/detail.component';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { StorageService } from 'src/app/services/storage/storage.service';
 import { FBTabService } from 'src/app/services/firebase/tab/tab.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
+import { FBConfigService } from 'src/app/services/firebase/config/config.service';
 
 @Component({
   selector: 'app-tab-list',
@@ -37,9 +38,10 @@ export class TabListPage implements OnInit {
     private utils: UtilsService,
     private fbTab: FBTabService,
     private storage: StorageService,
+    private fbConfig: FBConfigService,
   ) {
     if(this.storage.getUser().superUser){
-      this.displayedColumns.splice(1, 0, 'config');
+      this.displayedColumns.splice(1, 0, '_config');
     }
   }
 
@@ -49,19 +51,25 @@ export class TabListPage implements OnInit {
     }
     if(this.storage.getUser().superUser){
       this.fbTab.all().subscribe(tabs => {
-        this.dataSource = new MatTableDataSource<Tab>(tabs);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.loading = false;
+        this.loadData(tabs);
       });
     }else{
       this.fbTab.getByUrl(this.storage.getUser().config).subscribe(tabs => {
-        this.dataSource = new MatTableDataSource<Tab>(tabs);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.loading = false;
+        this.loadData(tabs);
       });
     }
+  }
+
+  loadData(tabs: Tab[]) {
+    for(const tab of tabs){
+      if(tab.config){
+        this.fbConfig.get(tab.config).subscribe(config => tab._config = config)
+      }
+    }
+    this.dataSource = new MatTableDataSource<Tab>(tabs);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    this.loading = false;
   }
 
   applyFilter() {

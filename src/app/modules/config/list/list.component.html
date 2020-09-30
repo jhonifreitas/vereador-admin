@@ -36,7 +36,7 @@
       <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef fxFlex="10">  </mat-header-cell>
         <mat-cell *matCellDef="let element" fxFlex="10">
-          <a mat-icon-button color="primary" [href]="'/configuracoes/formulario/'+element.url" *ngIf="canUpdate">
+          <a mat-icon-button color="primary" [href]="'/configuracoes/formulario/'+element.id" *ngIf="canUpdate">
             <mat-icon>edit</mat-icon>
           </a>
           <button mat-icon-button color="warn" (click)="confirmDelete(element)" *ngIf="canDelete">

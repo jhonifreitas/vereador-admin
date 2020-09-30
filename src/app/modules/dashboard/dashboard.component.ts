@@ -73,7 +73,7 @@ export class DashboardPage implements OnInit {
 
   markUsers() {
     if(!this.user.superUser && this.user.config){
-      this.fbAnalytics.getByURL(this.user.config).subscribe(analytics => {
+      this.fbAnalytics.getByConfig(this.user.config).subscribe(analytics => {
         this.mountMarker(analytics);
       });
     }else{

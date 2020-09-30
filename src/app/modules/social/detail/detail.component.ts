@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { Social } from 'src/app/models/social';
 import { StorageService } from 'src/app/services/storage/storage.service';
+import { FBConfigService } from 'src/app/services/firebase/config/config.service';
 
 @Component({
   selector: 'app-social-detail',
@@ -16,11 +17,15 @@ export class SocialDetailPage implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public object: Social,
     private storage: StorageService,
+    private fbConfig: FBConfigService,
     private dialogRef: MatDialogRef<SocialDetailPage>,
   ) { }
 
   ngOnInit(): void {
     this.isSuperUser = this.storage.getUser().superUser;
+    if(this.isSuperUser){
+      this.fbConfig.get(this.object.config).subscribe(config => this.object._config = config)
+    }
   }
 
   close(){

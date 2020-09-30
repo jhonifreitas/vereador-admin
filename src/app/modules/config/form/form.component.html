@@ -26,7 +26,11 @@
       <mat-form-field>
         <mat-label>Url</mat-label>
         <input matInput formControlName="url" (blur)="checkUrl()">
-        <mat-hint>https://minhaproposta.org/{{ this.form.get('url').value }}</mat-hint>
+        <mat-hint>
+          <a href="https://site.minhaproposta.org/{{ this.form.get('url').value }}" target="_blank">
+            https://site.minhaproposta.org/{{ this.form.get('url').value }}
+          </a>
+        </mat-hint>
         <mat-error *ngIf="controlUrl.hasError('exist')">Url já <strong>existente!</strong></mat-error>
         <mat-error *ngIf="controlUrl.hasError('required')">Url é <strong>obrigatório!</strong></mat-error>
         <mat-error *ngIf="controlUrl.hasError('hasSpace')">Url não pode conter <strong>espaço!</strong></mat-error>

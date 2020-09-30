@@ -64,9 +64,16 @@ export class ConfigListPage implements OnInit {
       this.utils.detail(ConfigDetailPage, object);
     }
   }
+  
+  async deleteImage(id: string){
+    await this.fbConfig.deleteImage(id);
+  }
 
   async delete(object: Config) {
-    await this.fbConfig.delete(object.url).then(_ => {
+    await this.fbConfig.delete(object.id).then(async _ => {
+      if(object.image){
+        await this.deleteImage(object.id);
+      }
       this.ngOnInit();
       this.utils.message('Configuração excluída com sucesso!', 'success');
     });

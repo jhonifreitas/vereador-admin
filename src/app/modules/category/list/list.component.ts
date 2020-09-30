@@ -9,6 +9,7 @@ import { Category } from 'src/app/models/category';
 import { CategoryDetailPage } from '../detail/detail.component';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
+import { FBConfigService } from 'src/app/services/firebase/config/config.service';
 import { FBCategoryService } from 'src/app/services/firebase/category/category.service';
 
 @Component({
@@ -36,10 +37,11 @@ export class CategoryListPage implements OnInit {
     private global: Global,
     private utils: UtilsService,
     private storage: StorageService,
+    private fbConfig: FBConfigService,
     private fbCategory: FBCategoryService,
   ) {
     if(this.storage.getUser().superUser){
-      this.displayedColumns.splice(1, 0, 'config');
+      this.displayedColumns.splice(1, 0, '_config');
     }
   }
 
@@ -49,19 +51,25 @@ export class CategoryListPage implements OnInit {
     }
     if(this.storage.getUser().superUser){
       this.fbCategory.all().subscribe(categories => {
-        this.dataSource = new MatTableDataSource<Category>(categories);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.loading = false;
+        this.loadData(categories);
       });
     }else{
       this.fbCategory.getByUrl(this.storage.getUser().config).subscribe(categories => {
-        this.dataSource = new MatTableDataSource<Category>(categories);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.loading = false;
+        this.loadData(categories);
       });
     }
+  }
+
+  loadData(categories: Category[]) {
+    for(const category of categories){
+      if(category.config){
+        this.fbConfig.get(category.config).subscribe(config => category._config = config)
+      }
+    }
+    this.dataSource = new MatTableDataSource<Category>(categories);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    this.loading = false;
   }
 
   applyFilter() {

@@ -11,6 +11,7 @@ import { SocialDetailPage } from '../detail/detail.component';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { FBSocialService } from 'src/app/services/firebase/social/social.service';
+import { FBConfigService } from 'src/app/services/firebase/config/config.service';
 
 @Component({
   selector: 'app-social-list',
@@ -36,11 +37,12 @@ export class SocialListPage implements OnInit {
     private router: Router,
     private global: Global,
     private utils: UtilsService,
-    private fbSocial: FBSocialService,
     private storage: StorageService,
+    private fbConfig: FBConfigService,
+    private fbSocial: FBSocialService,
   ) {
     if(this.storage.getUser().superUser){
-      this.displayedColumns.splice(2, 0, 'config');
+      this.displayedColumns.splice(2, 0, '_config');
     }
   }
 
@@ -50,19 +52,25 @@ export class SocialListPage implements OnInit {
     }
     if(this.storage.getUser().superUser){
       this.fbSocial.all().subscribe(socials => {
-        this.dataSource = new MatTableDataSource<Social>(socials);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.loading = false;
+        this.loadData(socials)
       });
     }else{
       this.fbSocial.getByUrl(this.storage.getUser().config).subscribe(socials => {
-        this.dataSource = new MatTableDataSource<Social>(socials);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.loading = false;
+        this.loadData(socials)
       });
     }
+  }
+
+  loadData(socials: Social[]) {
+    for(const social of socials){
+      if(social.config){
+        this.fbConfig.get(social.config).subscribe(config => social._config = config)
+      }
+    }
+    this.dataSource = new MatTableDataSource<Social>(socials);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    this.loading = false;
   }
 
   applyFilter() {

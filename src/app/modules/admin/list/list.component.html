@@ -26,9 +26,9 @@
         <mat-cell *matCellDef="let element"> {{ element.email }} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="config">
+      <ng-container matColumnDef="_config">
         <mat-header-cell mat-sort-header *matHeaderCellDef> Website </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{ element.config }} </mat-cell>
+        <mat-cell *matCellDef="let element"> {{ element._config ? element._config.url : '---' }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="superUser">

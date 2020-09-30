@@ -21,9 +21,9 @@
         <mat-cell matRipple *matCellDef="let element" fxFlexAlign="stretch" (click)="openDetail(element)"> {{ element.name }} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="config">
+      <ng-container matColumnDef="_config">
         <mat-header-cell mat-sort-header *matHeaderCellDef fxFlex="20"> Website </mat-header-cell>
-        <mat-cell *matCellDef="let element" fxFlex="20"> {{ element.config }} </mat-cell>
+        <mat-cell *matCellDef="let element" fxFlex="20"> {{ element._config.url }} </mat-cell>
       </ng-container>
   
       <ng-container matColumnDef="actions">

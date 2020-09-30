@@ -1,4 +1,5 @@
 export class Config {
+  id?: string;
   image: string;
   imageFeatured: number;
   shareMsg: string;

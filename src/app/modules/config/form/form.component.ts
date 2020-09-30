@@ -15,7 +15,7 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 })
 export class ConfigFormPage implements OnInit {
 
-  private url: string;
+  private id: string;
   private object: Config;
 
   saving = false;
@@ -32,7 +32,7 @@ export class ConfigFormPage implements OnInit {
     private fbConfig: FBConfigService,
     private activatedRoute: ActivatedRoute,
   ) {
-    this.url = this.activatedRoute.snapshot.paramMap.get('url');
+    this.id = this.activatedRoute.snapshot.paramMap.get('id');
     this.form = this.formGroup.group({
       shareMsg: new FormControl('', Validators.required),
       title: new FormControl('', Validators.required),
@@ -44,13 +44,13 @@ export class ConfigFormPage implements OnInit {
   }
 
   ngOnInit(): void {
-    if(!this.url && !this.global.hasPermission('configuration', 'can-add')){
+    if(!this.id && !this.global.hasPermission('configuration', 'can-add')){
       this.router.navigate(['/error/403']);
-    }else if(this.url && !this.global.hasPermission('configuration', 'can-update')){
+    }else if(this.id && !this.global.hasPermission('configuration', 'can-update')){
       this.router.navigate(['/error/403']);
     }
 
-    if(this.url){
+    if(this.id){
       this.getConfig();
     }
   }
@@ -80,19 +80,26 @@ export class ConfigFormPage implements OnInit {
 
   changeTitle() {
     let value:string = this.form.get('title').value;
-    // REPLACE SPACE TO HIFEN
-    value = value.toLowerCase().replace(/ /g, '-');
-    // REMOVE SPECIAL CHAR
-    value = value.replace(/[^A-Z0-9]-/ig, '');
-    // REPLACE ACCENTS
-    value = value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    value = value.replace(/^\s+|\s+$/g, ''); // trim
+    value = value.toLowerCase();
+
+    // remove accents, swap ñ for n, etc
+    var from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
+    var to   = "aaaaeeeeiiiioooouuuunc------";
+    for (var i=0, l=from.length ; i<l ; i++) {
+      value = value.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+    }
+
+    value = value.replace(/[^a-z0-9 -]/g, ''); // remove invalid chars
+    value = value.replace(/\s+/g, '-'); // collapse whitespace and replace by -
+    value = value.replace(/-+/g, '-'); // collapse dashes
     this.controlUrl.setValue(value);
   }
 
   checkUrl() {
     if(this.controlUrl.value){
-      this.fbConfig.get(this.controlUrl.value).subscribe(config => {
-        if(config && (this.url || '') != this.controlUrl.value){
+      this.fbConfig.getByURL(this.controlUrl.value).subscribe(config => {
+        if(config && (this.id || '') != this.controlUrl.value){
           this.controlUrl.setErrors({exist: true});
         }
       })
@@ -100,7 +107,7 @@ export class ConfigFormPage implements OnInit {
   }
 
   getConfig() {
-    this.fbConfig.get(this.url).subscribe(user => {
+    this.fbConfig.get(this.id).subscribe(user => {
       if(user){
         this.object = user;
         this.setData();
@@ -152,15 +159,13 @@ export class ConfigFormPage implements OnInit {
     if(this.form.valid){
       this.saving = true;
       const data = this.form.value;
-      if(this.url == data.url){
-        await this.fbConfig.update(this.url, data);
-        await this.saveImage(this.url);
+      if(this.id){
+        await this.fbConfig.update(this.id, data);
+        await this.saveImage(this.id);
       }else{
-        await this.fbConfig.create(data);
-        await this.saveImage(data.url);
-        if(this.url){
-          await this.fbConfig.delete(this.url);
-        }
+        await this.fbConfig.create(data).then(async doc => {
+          await this.saveImage(doc.id);
+        });
       }
       this.saving = false;
       if(this.storage.getUser().superUser){

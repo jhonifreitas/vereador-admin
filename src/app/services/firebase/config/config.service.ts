@@ -18,52 +18,56 @@ export class FBConfigService {
   ) { }
 
   all() {
-    return this.db.collection(this.collectionName).get().pipe(
+    return this.db.collection(this.collectionName).snapshotChanges().pipe(
       map(actions => {
-        return actions.docs.map(doc => {
+        return actions.map(action => {
+          const doc = action.payload.doc;
           if(doc.exists){
-            return doc.data() as Config;
+            return {id: doc.id, ...doc.data() as Config} as Config;
           }
         })
       })
     );
   }
 
-  get(url: string) {
-    return this.db.collection(this.collectionName).doc<Config>(url).get().pipe(
-      map(action => {
-        if(action.exists){
-          return action.data() as Config;
-        }
-      })
-    );
+  get(id: string) {
+    return this.db.collection(this.collectionName).doc<Config>(id).valueChanges();
+  }
+
+  getByURL(url: string) {
+    return this.db.collection(this.collectionName, ref => ref.where('url', '==', url).limit(1)).valueChanges()
+      .pipe(
+        map(items => {
+          return items.length ? items[0] : null;
+        })
+      );
   }
 
   create(data: Config) {
-    return this.db.collection<Config>(this.collectionName).doc(data.url).set(data);
+    return this.db.collection<Config>(this.collectionName).add(data);
   }
 
-  update(url: string, data: Partial<Config>) {
-    return this.db.collection(this.collectionName).doc<Config>(url).update(data);
+  update(id: string, data: Partial<Config>) {
+    return this.db.collection(this.collectionName).doc<Config>(id).update(data);
   }
 
-  delete(url: string) {
-    return this.db.collection(this.collectionName).doc<Config>(url).delete();
+  delete(id: string) {
+    return this.db.collection(this.collectionName).doc<Config>(id).delete();
   }
 
   // IMAGE
-  async addImage(url: string, file: Blob){
-    const fileName = url+'.png';
+  async addImage(id: string, file: Blob){
+    const fileName = id+'.png';
     return await this.afStorage.ref(`${this.collectionName}/${fileName}`).put(file).then(async (res) => {
-      const imageUrl = await res.ref.getDownloadURL();
-      await this.update(url, {image: imageUrl});
+      const url = await res.ref.getDownloadURL();
+      await this.update(id, {image: url});
     });
   }
 
-  async deleteImage(url: string){
-    const path = `${this.collectionName}/${url}`;
-    return await this.afStorage.ref(path).delete().toPromise().then(async _ => {
-      await this.update(url, {image: null});
+  async deleteImage(id: string){
+    const path = `${this.collectionName}/${id}`;
+    return this.afStorage.ref(path).delete().toPromise().then(async _ => {
+      await this.update(id, {image: null});
     });
   }
 }
