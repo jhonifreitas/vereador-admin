@@ -38,7 +38,7 @@ export class FBConfigService {
     return this.db.collection(this.collectionName, ref => ref.where('url', '==', url).limit(1)).valueChanges()
       .pipe(
         map(items => {
-          return items.length ? items[0] : null;
+          return items.length ? items[0] as Config : null;
         })
       );
   }
@@ -65,7 +65,7 @@ export class FBConfigService {
   }
 
   async deleteImage(id: string){
-    const path = `${this.collectionName}/${id}`;
+    const path = `${this.collectionName}/${id}.png`;
     return this.afStorage.ref(path).delete().toPromise().then(async _ => {
       await this.update(id, {image: null});
     });
