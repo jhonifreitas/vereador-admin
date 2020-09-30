@@ -1,23 +1,44 @@
 <h2 class="title">Configurações gerais</h2>
 
 <form [formGroup]="form">
-  <div id="images" class="container mat-elevation-z8">
-    <h2>Imagem</h2>
-    <div class="image" *ngIf="image">
-      <button mat-mini-fab color="warn" (click)="deleteImage()">
-        <mat-icon>delete</mat-icon>
-      </button>
-      <img [src]="image.path" alt="">
+  <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column">
+    <div id="images" fxFlex.gt-sm="60" class="container mat-elevation-z8">
+      <h2>Imagem</h2>
+      <div class="image" *ngIf="image">
+        <button mat-mini-fab color="warn" (click)="deleteImage()">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <img [src]="image.path" alt="">
+      </div>
+      <ngx-dropzone (change)="takeImage($event)" *ngIf="!image">
+        <ngx-dropzone-label>Arraste os arquivos aqui ou clique para fazer o upload.</ngx-dropzone-label>
+      </ngx-dropzone>
     </div>
-    <ngx-dropzone (change)="takeImage($event)" *ngIf="!image">
-      <ngx-dropzone-label>Arraste os arquivos aqui ou clique para fazer o upload.</ngx-dropzone-label>
-    </ngx-dropzone>
+    <div id="previewShare" fxFlex.gt-sm="40" fxFlexOffset.gt-sm="2" class="container">
+      <h2>Visualização</h2>
+      <mat-card class="whatsapp mat-elevation-z8">
+        <div class="header" fxLayout="row" fxLayoutAlign="center center">
+          <div class="image" *ngIf="image">
+            <img [src]="image.path" alt="">
+          </div>
+          <div class="text">
+            <p class="title font-weight-medium">{{ form.get('title').value }}</p>
+            <p class="desc">{{ form.get('description').value }}</p>
+            <p class="url">site.minhaproposta.org</p>
+          </div>
+        </div>
+        <mat-card-content class="text-wrap">{{ form.get('shareMsg').value }}
+          <br><br>
+          <a href="https://site.minhaproposta.org/{{ this.form.get('url').value }}">https://site.minhaproposta.org/{{ this.form.get('url').value }}</a>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </div>
   <!-- WEBSITE -->
   <div id="website" class="container mat-elevation-z8">
     <h2>Website</h2>
 
-    <div fxLayout="row" fxLayoutGap="20px">
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px">
       <mat-form-field fxFlex="50">
         <mat-label>Título</mat-label>
         <input matInput formControlName="title" (keyup)="changeTitle()">

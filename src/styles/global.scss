@@ -28,7 +28,7 @@ img {max-width: 100%;}
   object-position: center;
 }
 
-.text-wrap {white-space: normal !important;}
+.text-wrap {white-space: pre-wrap !important;}
 .truncate {
   overflow: hidden;
   white-space: nowrap;
