@@ -11,9 +11,29 @@
       <div matLine class="info"> {{ object.title }} </div>
     </mat-list-item>
     <mat-list-item>
-      <mat-icon matListIcon>lock</mat-icon>
+      <mat-icon matListIcon>build</mat-icon>
+      <div matLine><strong> URL </strong></div>
+      <div matLine class="info"> {{ object.url }} </div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon matListIcon>vpn_key</mat-icon>
+      <div matLine><strong> Palavras chaves </strong></div>
+      <div matLine class="info"> {{ object.keywords }} </div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon matListIcon>more_horiz</mat-icon>
       <div matLine><strong> Descrição </strong></div>
       <div matLine class="info"> {{ object.description }} </div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon matListIcon>more_horiz</mat-icon>
+      <div matLine><strong> Mensagem de compartilhamento </strong></div>
+      <div matLine class="info"> {{ object.shareMsg }} </div>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon matListIcon>more_horiz</mat-icon>
+      <div matLine><strong> Doação </strong></div>
+      <div matLine class="info"> {{ object.donation }} </div>
     </mat-list-item>
   </mat-list>
 </div>

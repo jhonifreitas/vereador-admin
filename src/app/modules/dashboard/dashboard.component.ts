@@ -88,7 +88,7 @@ export class DashboardPage implements OnInit {
       this.access = this.access.concat(analytic.access);
       for(const access of analytic.access){
         const marker: Marker = {
-          ip: analytic.ip,
+          id: analytic.id,
           lat: access.lat,
           lng: access.long,
           color: 'primary'
@@ -108,9 +108,9 @@ export class DashboardPage implements OnInit {
       map: this.map,
       html: '<div class="'+class_name.join(' ')+'"></div>',
     });
-    marker.set('ip', obj.ip);
+    marker.set('id', obj.id);
 
-    const index = this.markers.findIndex(marker => marker.get('ip') == obj.ip);
+    const index = this.markers.findIndex(marker => marker.get('id') == obj.id);
     if(index >= 0){
       this.markers.splice(index, 1);
     }

@@ -97,7 +97,8 @@ export class ConfigFormPage implements OnInit {
   }
 
   checkUrl() {
-    if(this.controlUrl.value){
+    const url = this.object ? this.object.url : '';
+    if(this.controlUrl.value && (url != this.controlUrl.value)){
       this.fbConfig.getByURL(this.controlUrl.value).subscribe(config => {
         if(config && (this.id || '') != this.controlUrl.value){
           this.controlUrl.setErrors({exist: true});
@@ -147,7 +148,7 @@ export class ConfigFormPage implements OnInit {
   async deleteImage() {
     if(!this.image.new){
       this.utils.delete().then(async _ => {
-        await this.fbConfig.deleteImage(this.object.url);
+        await this.fbConfig.deleteImage(this.object.id);
         this.image = null;
       }).catch(_ => {})
     }else{

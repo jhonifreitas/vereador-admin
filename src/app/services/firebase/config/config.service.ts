@@ -31,14 +31,20 @@ export class FBConfigService {
   }
 
   get(id: string) {
-    return this.db.collection(this.collectionName).doc<Config>(id).valueChanges();
+    return this.db.collection(this.collectionName).doc<Config>(id).snapshotChanges().pipe(
+      map(action => {
+        return {id: action.payload.id, ...action.payload.data()} as Config;
+      })
+    );
   }
 
   getByURL(url: string) {
-    return this.db.collection(this.collectionName, ref => ref.where('url', '==', url).limit(1)).valueChanges()
+    return this.db.collection<Config>(
+      this.collectionName, ref => ref.where('url', '==', url).limit(1)
+    ).valueChanges()
       .pipe(
         map(items => {
-          return items.length ? items[0] as Config : null;
+          return items.length ? items[0] : null;
         })
       );
   }

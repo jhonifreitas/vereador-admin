@@ -5,6 +5,7 @@ export class Access {
 }
 
 export class Analytics {
+  id: string;
   ip: string;
   config: string;
   access: Access[];
