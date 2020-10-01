@@ -89,6 +89,13 @@
       <mat-error>Doação é <strong>obrigatório!</strong></mat-error>
     </mat-form-field>
   </div>
+
+  <div class="container mat-elevation-z8">
+    <h2 style="margin-bottom: 0;">Pixel</h2>
+    <mat-form-field appearance="standard" floatLabel="always">
+      <textarea matInput rows="8" [placeholder]="pixelPlaceholder" formControlName="pixel"></textarea>
+    </mat-form-field>
+  </div>
 </form>
 
 <button mat-fab color="primary" class="fab-bottom-right" [disabled]="form.invalid" (click)="save()">

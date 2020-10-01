@@ -12,3 +12,15 @@
   <div #map class="map"></div>
   <ng-lottie *ngIf="loadingMap" [options]="lottieOpts" width="150px" height="150px"></ng-lottie>
 </div>
+
+<br>
+<mat-divider></mat-divider>
+<br>
+
+<div id="accessChart" class="mat-elevation-z8">
+  <ng-lottie *ngIf="loadingAccessChart" [options]="lottieOpts" width="150px" height="150px"></ng-lottie>
+  <app-widget-area *ngIf="!loadingAccessChart" title="Acessos" [data]="accessChart"></app-widget-area>
+</div>
+
+<br>
+<br>

@@ -18,11 +18,12 @@ export class ConfigFormPage implements OnInit {
 
   private id: string;
   private object: Config;
+  private donationMsg = 'Olá, abaixo nossos dados Bancários para nos ajudar:\n\nNome Completo:\nCNPJ:\nBanco:\nAgência:\nConta:';
 
   saving = false;
   form: FormGroup;
   image: {path: string; new: boolean, file?: Blob;};
-  private donationMsg = 'Olá, abaixo nossos dados Bancários para nos ajudar:\n\nNome Completo:\nCNPJ:\nBanco:\nAgência:\nConta:';
+  pixelPlaceholder = `!function(f,b,e,v,n,t,s)\n{if(f.fbq)return;n=f.fbq=function(){n.callMethod?\nn.callMethod.apply(n,arguments):n.queue.push(arguments)};\nif(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';\nn.queue=[];t=b.createElement(e);t.async=!0;\nt.src=v;s=b.getElementsByTagName(e)[0];\ns.parentNode.insertBefore(t,s)}(window, document,'script',\n'https://connect.facebook.net/en_US/fbevents.js');\nfbq('init', 'SEU ID DO PIXEL VAI AQUI');\nfbq('track', 'PageView');`;
 
   constructor(
     private global: Global,
@@ -41,6 +42,7 @@ export class ConfigFormPage implements OnInit {
       keywords: new FormControl([], Validators.required),
       description: new FormControl('', Validators.required),
       donation: new FormControl(this.donationMsg, Validators.required),
+      pixel: new FormControl(''),
     });
   }
 
@@ -130,6 +132,7 @@ export class ConfigFormPage implements OnInit {
     this.form.get('keywords').setValue(this.object.keywords);
     this.form.get('description').setValue(this.object.description);
     this.form.get('donation').setValue(this.object.donation || this.donationMsg);
+    this.form.get('pixel').setValue(this.object.pixel);
   }
 
   async takeImage(event: any) {

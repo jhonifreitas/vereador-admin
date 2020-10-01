@@ -49,8 +49,8 @@ img {max-width: 100%;}
     cursor: pointer;
     border-radius: 50%;
     opacity: 1 !important;
-    width: 13px !important;
-    height: 13px !important;
+    width: 15px !important;
+    height: 15px !important;
     overflow: visible !important;
 
     &.color-warn, &.color-warn::after, &.color-warn::before {background: mat-color($warn);}

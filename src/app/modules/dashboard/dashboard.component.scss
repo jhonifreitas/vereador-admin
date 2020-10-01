@@ -7,10 +7,13 @@
     left: 0;
     right: 0;
     bottom: 0;
-    display: flex;
-    background: #fff;
     position: absolute;
-    align-items: center;
-    justify-content: center;
   }
+}
+
+ng-lottie {
+  display: flex;
+  background: #fff;
+  align-items: center;
+  justify-content: center;
 }

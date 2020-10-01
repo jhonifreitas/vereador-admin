@@ -6,13 +6,16 @@ import { AnimationOptions } from 'ngx-lottie';
 import { Admin } from 'src/app/models/admin';
 import { Global } from 'src/app/models/global';
 import { Marker } from 'src/app/models/marker';
+import { Chart, ChartData } from 'src/app/models/chart';
 import { Access, Analytics } from 'src/app/models/analytics';
 
+import { UtilsService } from 'src/app/services/utils/utils.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import createHTMLMapMarker from "src/app/services/google-maps/html-map-marker";
 import { FBAnalyticsService } from 'src/app/services/firebase/analytics/analytics.service';
 
 declare var google: any;
+declare var MarkerClusterer: any;
 
 @Component({
   selector: 'app-dashboard',
@@ -26,6 +29,8 @@ export class DashboardPage implements OnInit {
   user: Admin;
   loadingMap = true;
   access: Access[] = [];
+  loadingAccessChart = true;
+  accessChart: Chart[] = [];
   lottieOpts: AnimationOptions = {path: '/assets/lottie/loading.json'};
 
   private map: any;
@@ -35,6 +40,7 @@ export class DashboardPage implements OnInit {
   constructor(
     private router: Router,
     private global: Global,
+    private utils: UtilsService,
     private storage: StorageService,
     private fbAnalytics: FBAnalyticsService
   ) {
@@ -64,31 +70,55 @@ export class DashboardPage implements OnInit {
             zoom: this.zoom,
             ...this.global.map
           });
-          this.markUsers();
+
+          this.getAnalytics();
+
           this.loadingMap = false;
         }, 500);
       }
     })
   }
 
-  markUsers() {
+  getAnalytics() {
     if(!this.user.superUser && this.user.config){
       this.fbAnalytics.getByConfig(this.user.config).subscribe(analytics => {
         this.mountMarker(analytics);
+        this.loadAccessChart(analytics);
       });
     }else{
       this.fbAnalytics.all().subscribe(analytics => {
         this.mountMarker(analytics);
+        this.loadAccessChart(analytics);
       });
     }
   }
 
+  loadAccessChart(analytics: Analytics[]) {
+    const allAccess:ChartData[] = [];
+
+    for(const analytic of analytics){
+      for(const access of analytic.access){
+        const date = access.date.toDate();
+        const accessIndex = allAccess.findIndex(data => this.utils.formatDate(data.x, 'yyyy-MM-dd') == this.utils.formatDate(date, 'yyyy-MM-dd'));
+        if(accessIndex > -1){
+          allAccess[accessIndex].y += 1;
+        }else{
+          allAccess.push({x: date.getTime(), y: 1});
+        }
+      }
+    }
+    allAccess.sort((a, b) => a.x - b.x);
+    this.accessChart.push({name: 'Geral', data: allAccess});
+    this.loadingAccessChart = false;
+  }
+
   mountMarker(analytics: Analytics[]){
+    this.access = [];
     for(const analytic of analytics){
       this.access = this.access.concat(analytic.access);
       for(const access of analytic.access){
         const marker: Marker = {
-          id: analytic.id,
+          id: analytic.ip,
           lat: access.lat,
           lng: access.long,
           color: 'primary'
@@ -96,24 +126,19 @@ export class DashboardPage implements OnInit {
         this.addMarker(marker);
       }
     }
+
+    new MarkerClusterer(this.map, this.markers, {
+      imagePath: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+    });
   }
 
   addMarker(obj: Marker) {
     const class_name = ['marker', 'color-'+obj.color];
-    if(obj.color== 'warn'){
-      class_name.push('pulse');
-    }
     let marker = createHTMLMapMarker({
       latlng: new google.maps.LatLng(obj.lat, obj.lng),
-      map: this.map,
       html: '<div class="'+class_name.join(' ')+'"></div>',
     });
     marker.set('id', obj.id);
-
-    const index = this.markers.findIndex(marker => marker.get('id') == obj.id);
-    if(index >= 0){
-      this.markers.splice(index, 1);
-    }
     this.markers.push(marker);
   }
 }

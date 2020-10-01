@@ -30,7 +30,7 @@ const createHTMLMapMarker = ({
   
         positionDiv() {
             const point = this.getProjection().fromLatLngToDivPixel(this.latlng);
-            let offset = 25;
+            let offset = 10;
             if (point) {
                 this.div.style.left = `${point.x - offset}px`;
                 this.div.style.top = `${point.y - offset}px`;
