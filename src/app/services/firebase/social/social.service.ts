@@ -16,7 +16,7 @@ export class FBSocialService {
   ) { }
 
   all() {
-    return this.db.collection(this.collectionName).get().pipe(
+    return this.db.collection(this.collectionName, ref => ref.orderBy('order')).get().pipe(
       map(actions => {
         return actions.docs.map(doc => {
           if(doc.exists){
@@ -28,7 +28,7 @@ export class FBSocialService {
   }
 
   getByUrl(configUrl: string) {
-    return this.db.collection(this.collectionName, ref => ref.where('config', '==', configUrl)).get().pipe(
+    return this.db.collection(this.collectionName, ref => ref.where('config', '==', configUrl).orderBy('order')).get().pipe(
       map(actions => {
         return actions.docs.map(doc => {
           if(doc.exists){

@@ -91,6 +91,7 @@ export class TabFormPage implements OnInit {
       if(this.id){
         await this.fbTab.update(this.id, data);
       }else{
+        data.order = 0;
         await this.fbTab.create(data);
       }
       this.saving = false;

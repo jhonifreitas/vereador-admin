@@ -4,6 +4,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+
 import { Global } from 'src/app/models/global';
 import { Category } from 'src/app/models/category';
 import { CategoryDetailPage } from '../detail/detail.component';
@@ -22,6 +24,8 @@ export class CategoryListPage implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
+  private object_list: Category[];
+
   canView = this.global.hasPermission('category', 'can-view');
   canAdd = this.global.hasPermission('category', 'can-add');
   canUpdate = this.global.hasPermission('category', 'can-update');
@@ -30,7 +34,7 @@ export class CategoryListPage implements OnInit {
   filter: string;
   loading = true;
   dataSource: MatTableDataSource<Category>;
-  displayedColumns: string[] = ['name', 'actions'];
+  displayedColumns: string[] = ['order', 'name', 'actions'];
 
   constructor(
     private router: Router,
@@ -41,7 +45,7 @@ export class CategoryListPage implements OnInit {
     private fbCategory: FBCategoryService,
   ) {
     if(this.storage.getUser().superUser){
-      this.displayedColumns.splice(1, 0, '_config');
+      this.displayedColumns.splice(2, 0, '_config');
     }
   }
 
@@ -51,10 +55,12 @@ export class CategoryListPage implements OnInit {
     }
     if(this.storage.getUser().superUser){
       this.fbCategory.all().subscribe(categories => {
+        this.object_list = categories;
         this.loadData(categories);
       });
     }else{
       this.fbCategory.getByUrl(this.storage.getUser().config).subscribe(categories => {
+        this.object_list = categories;
         this.loadData(categories);
       });
     }
@@ -74,6 +80,21 @@ export class CategoryListPage implements OnInit {
 
   applyFilter() {
     this.dataSource.filter = this.filter.trim().toLowerCase();
+  }
+
+  async drop(event: CdkDragDrop<string[]>) {
+    this.loading = true;
+    let newOrderData: Category[] = [];
+    newOrderData = newOrderData.concat(this.dataSource.data);
+    this.dataSource = null;
+    moveItemInArray(newOrderData, event.previousIndex, event.currentIndex);
+    for(const index in newOrderData){
+      if(newOrderData[index].order != this.object_list[index].order){
+        await this.fbCategory.update(newOrderData[index].id, {order: parseInt(index)})
+      }
+    }
+    this.loadData(newOrderData);
+    this.loading = false;
   }
 
   openDetail(object?: Category) {

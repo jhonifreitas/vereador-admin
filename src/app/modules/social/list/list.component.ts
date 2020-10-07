@@ -4,6 +4,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+
 import { Social } from 'src/app/models/social';
 import { Global } from 'src/app/models/global';
 import { SocialFormPage } from '../form/form.component';
@@ -23,6 +25,8 @@ export class SocialListPage implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
+  private object_list: Social[];
+
   canView = this.global.hasPermission('social', 'can-view');
   canAdd = this.global.hasPermission('social', 'can-add');
   canUpdate = this.global.hasPermission('social', 'can-update');
@@ -31,7 +35,7 @@ export class SocialListPage implements OnInit {
   filter: string;
   loading = true;
   dataSource: MatTableDataSource<Social>;
-  displayedColumns: string[] = ['type', 'url', 'actions'];
+  displayedColumns: string[] = ['order', 'type', 'url', 'actions'];
 
   constructor(
     private router: Router,
@@ -42,7 +46,7 @@ export class SocialListPage implements OnInit {
     private fbSocial: FBSocialService,
   ) {
     if(this.storage.getUser().superUser){
-      this.displayedColumns.splice(2, 0, '_config');
+      this.displayedColumns.splice(3, 0, '_config');
     }
   }
 
@@ -52,10 +56,12 @@ export class SocialListPage implements OnInit {
     }
     if(this.storage.getUser().superUser){
       this.fbSocial.all().subscribe(socials => {
+        this.object_list = socials;
         this.loadData(socials)
       });
     }else{
       this.fbSocial.getByUrl(this.storage.getUser().config).subscribe(socials => {
+        this.object_list = socials;
         this.loadData(socials)
       });
     }
@@ -75,6 +81,21 @@ export class SocialListPage implements OnInit {
 
   applyFilter() {
     this.dataSource.filter = this.filter.trim().toLowerCase();
+  }
+
+  async drop(event: CdkDragDrop<string[]>) {
+    this.loading = true;
+    let newOrderData: Social[] = [];
+    newOrderData = newOrderData.concat(this.dataSource.data);
+    this.dataSource = null;
+    moveItemInArray(newOrderData, event.previousIndex, event.currentIndex);
+    for(const index in newOrderData){
+      if(newOrderData[index].order != this.object_list[index].order){
+        await this.fbSocial.update(newOrderData[index].id, {order: parseInt(index)})
+      }
+    }
+    this.loadData(newOrderData);
+    this.loading = false;
   }
 
   openDetail(object?: Social) {

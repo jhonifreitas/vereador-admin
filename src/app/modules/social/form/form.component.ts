@@ -78,6 +78,7 @@ export class SocialFormPage implements OnInit {
       if(this.data && this.data.id){
         await this.fbSocial.update(this.data.id, data);
       }else{
+        data.order = 0;
         await this.fbSocial.create(data);
       }
       this.saving = false;

@@ -14,7 +14,14 @@
 
 <div class="container mat-elevation-z8">
   <div class="table-responsive">
-    <mat-table matSort [dataSource]="dataSource">
+    <mat-table matSort cdkDropList (cdkDropListDropped)="drop($event)" [dataSource]="dataSource">
+
+      <ng-container matColumnDef="order">
+        <mat-header-cell *matHeaderCellDef fxFlex.gt-md="10"> Ordem </mat-header-cell>
+        <mat-cell *matCellDef="let element" fxFlex.gt-md="10"> 
+          <mat-icon cdkDragHandle class="reorder">reorder</mat-icon>
+        </mat-cell>
+      </ng-container>
   
       <ng-container matColumnDef="name">
         <mat-header-cell mat-sort-header *matHeaderCellDef> Nome </mat-header-cell>
@@ -39,7 +46,7 @@
       </ng-container>
   
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      <mat-row cdkDrag cdkDragLockAxis="y" cdkDragBoundary="mat-table" *matRowDef="let row; columns: displayedColumns;"></mat-row>
       
       <div class="noData" *matNoDataRow fxLayout="row">
         <div fxFlex="grow" fxFlexAlign="center" class="text-center">Nenhum registro encontrado!</div>

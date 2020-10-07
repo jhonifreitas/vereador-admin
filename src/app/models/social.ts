@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import { Config } from './config';
 
 export class Social {
@@ -5,6 +6,7 @@ export class Social {
   config: string;
   url: string;
   type: 'facebook' | 'instagram' | 'youtube' | 'linkedin';
+  order: number;
 
   _config?: Config;
 }

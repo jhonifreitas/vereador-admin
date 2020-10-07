@@ -91,6 +91,7 @@ export class CategoryFormPage implements OnInit {
       if(this.id){
         await this.fbCategory.update(this.id, data);
       }else{
+        data.order = 0;
         await this.fbCategory.create(data);
       }
       this.saving = false;

@@ -5,6 +5,7 @@ export class Category {
   config: string;
   name: string;
   text: string;
+  order: number;
 
   _config?: Config;
 }
