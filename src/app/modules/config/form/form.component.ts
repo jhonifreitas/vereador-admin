@@ -22,6 +22,7 @@ export class ConfigFormPage implements OnInit {
 
   saving = false;
   form: FormGroup;
+  owners: Config[];
   image: {path: string; new: boolean, file?: Blob;};
   pixelPlaceholder = `!function(f,b,e,v,n,t,s)\n{if(f.fbq)return;n=f.fbq=function(){n.callMethod?\nn.callMethod.apply(n,arguments):n.queue.push(arguments)};\nif(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';\nn.queue=[];t=b.createElement(e);t.async=!0;\nt.src=v;s=b.getElementsByTagName(e)[0];\ns.parentNode.insertBefore(t,s)}(window, document,'script',\n'https://connect.facebook.net/en_US/fbevents.js');\nfbq('init', 'SEU ID DO PIXEL VAI AQUI');\nfbq('track', 'PageView');`;
 
@@ -55,6 +56,11 @@ export class ConfigFormPage implements OnInit {
 
     if(this.id){
       this.getConfig();
+    }
+
+    if(this.storage.getUser().superUser){
+      this.form.addControl('owner', new FormControl(''));
+      this.getOwners();
     }
   }
 
@@ -122,6 +128,12 @@ export class ConfigFormPage implements OnInit {
     })
   }
 
+  getOwners() {
+    this.fbConfig.all().subscribe(owners => {
+      this.owners = owners.filter(owner => owner.id != this.id);
+    })
+  }
+
   setData() {
     if(this.object.image){
       this.image = {path: this.object.image, new: false};
@@ -133,6 +145,9 @@ export class ConfigFormPage implements OnInit {
     this.form.get('description').setValue(this.object.description);
     this.form.get('donation').setValue(this.object.donation || this.donationMsg);
     this.form.get('pixel').setValue(this.object.pixel);
+    if(this.storage.getUser().superUser){
+      this.form.get('owner').setValue(this.object.owner);
+    }
   }
 
   async takeImage(event: any) {

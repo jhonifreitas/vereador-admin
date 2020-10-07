@@ -11,5 +11,7 @@ export class Config {
   shareMsg: string;
   donation: string;
 
+  owner?: string;
+
   pixel?: string;
 }

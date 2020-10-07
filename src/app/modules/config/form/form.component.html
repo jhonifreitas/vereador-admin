@@ -47,6 +47,13 @@
   <div id="website" class="container mat-elevation-z8">
     <h2>Website</h2>
 
+    <mat-form-field *ngIf="form.get('owner')">
+      <mat-label>Responsável</mat-label>
+      <mat-select formControlName="owner">
+        <mat-option *ngFor="let owner of owners" [value]="owner.id">{{ owner.title }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px">
       <mat-form-field fxFlex="50">
         <mat-label>Título</mat-label>
