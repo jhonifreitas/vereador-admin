@@ -16,8 +16,8 @@
     border-radius: 15px;
   }
   .reorder{cursor: move;}
-  mat-row{pointer-events: none;}
-  button, .reorder{pointer-events: all;}
+  // mat-row{pointer-events: none;}
+  // a, button, .reorder{pointer-events: all;}
 }
 
 // DRAG & DROP
