@@ -9,8 +9,8 @@ export class Config {
   keywords: string[];
   description: string;
   shareMsg: string;
-  donation: string;
-
+  donation?: string;
+  
   owner?: string;
 
   pixel?: string;

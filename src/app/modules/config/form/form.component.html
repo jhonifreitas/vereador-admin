@@ -92,7 +92,7 @@
 
     <mat-form-field>
       <mat-label>Doação</mat-label>
-      <textarea matInput rows="8" formControlName="donation"></textarea>
+      <textarea matInput rows="8" formControlName="donation" [placeholder]="donationMsg"></textarea>
       <mat-error>Doação é <strong>obrigatório!</strong></mat-error>
     </mat-form-field>
   </div>
