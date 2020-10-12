@@ -186,6 +186,10 @@ export class ConfigFormPage implements OnInit {
     if(this.form.valid){
       this.saving = true;
       const data = this.form.value;
+      for (const field in data) {
+        if(!data[field] && data[field] != false){data[field] = null}
+        else if(data[field] instanceof Date){data[field] = data[field].toISOString()}
+      }
       if(this.id){
         await this.fbConfig.update(this.id, data);
         await this.saveImage(this.id);
