@@ -42,7 +42,7 @@ export class SocialFormPage implements OnInit {
     this.form = this.formGroup.group({
       config: new FormControl(configValue, Validators.required),
       type: new FormControl('', Validators.required),
-      url: new FormControl('', [Validators.required, Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?')]),
+      url: new FormControl('', Validators.required),
     });
   }
 
