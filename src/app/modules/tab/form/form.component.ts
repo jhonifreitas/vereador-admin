@@ -88,6 +88,15 @@ export class TabFormPage implements OnInit {
     if(this.form.valid){
       this.saving = true;
       const data = this.form.value;
+
+      const tagImgs = [].slice.call(document.getElementsByClassName('ql-editor')[0].getElementsByTagName('img'));
+      for(const tag of tagImgs){
+        const base64 = tag.src;
+        const file = this.utils.covertBase64ToBlob(base64);
+        const url = await this.fbTab.addImage(file);
+        data.text = data.text.replace(base64, url);
+      }
+
       if(this.id){
         await this.fbTab.update(this.id, data);
       }else{

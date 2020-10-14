@@ -101,13 +101,7 @@ export class UtilsService {
       const orientation = -1;
       this.imageCompress.compressFile(base64, orientation, 50, 50).then(result => {
         // CONVERT BASE64 TO FILE
-        const byteString = window.atob(result.split(',')[1]);
-        const arrayBuffer = new ArrayBuffer(byteString.length);
-        const int8Array = new Uint8Array(arrayBuffer);
-        for (let i = 0; i < byteString.length; i++) {
-          int8Array[i] = byteString.charCodeAt(i);
-        }
-        const compressed = new Blob([int8Array], { type: 'image/png' });
+        const compressed = this.covertBase64ToBlob(result);
         const img = new Image();
         img.onload = (event) => {
           const target = event.target as any;
@@ -116,6 +110,16 @@ export class UtilsService {
         img.src = result;
       });
     });
+  }
+
+  covertBase64ToBlob(base64: string) {
+    const byteString = window.atob(base64.split(',')[1]);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      int8Array[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([int8Array], { type: 'image/png' });
   }
 
   private async readFile(file: File): Promise<string | ArrayBuffer> {

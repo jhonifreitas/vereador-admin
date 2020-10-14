@@ -1,6 +1,7 @@
 import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 import { Tab } from 'src/app/models/tab';
 
@@ -13,6 +14,7 @@ export class FBTabService {
 
   constructor(
     private db: AngularFirestore,
+    private afStorage: AngularFireStorage
   ) { }
 
   all() {
@@ -65,5 +67,16 @@ export class FBTabService {
 
   delete(id: string) {
     return this.db.collection(this.collectionName).doc<Tab>(id).delete();
+  }
+
+  // IMAGE
+  async addImage(file: Blob): Promise<string> {
+    return new Promise(resolve => {
+      const fileName = `${Math.random()}.png`;
+      this.afStorage.ref(`editors/${fileName}`).put(file).then(async (res) => {
+        const url = await res.ref.getDownloadURL();
+        resolve(url);
+      });
+    })
   }
 }

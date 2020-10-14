@@ -1,6 +1,7 @@
 import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 import { Category } from 'src/app/models/category';
 
@@ -14,6 +15,7 @@ export class FBCategoryService {
 
   constructor(
     private db: AngularFirestore,
+    private afStorage: AngularFireStorage
   ) { }
 
   all() {
@@ -66,5 +68,16 @@ export class FBCategoryService {
 
   delete(id: string) {
     return this.db.collection(this.collectionName).doc<Category>(id).delete();
+  }
+
+  // IMAGE
+  async addImage(file: Blob): Promise<string> {
+    return new Promise(resolve => {
+      const fileName = `${Math.random()}.png`;
+      this.afStorage.ref(`editors/${fileName}`).put(file).then(async (res) => {
+        const url = await res.ref.getDownloadURL();
+        resolve(url);
+      });
+    })
   }
 }
