@@ -22,7 +22,7 @@ export class ConfigFormPage implements OnInit {
   saving = false;
   form: FormGroup;
   owners: Config[];
-  image: {path: string; new: boolean, file?: Blob;};
+  image: {path: string; new: boolean, width: number, height: number, file?: Blob;};
   donationMsg = 'Olá, abaixo nossos dados Bancários para nos ajudar:\n\nNome Completo:\nCNPJ:\nBanco:\nAgência:\nConta:';
   pixelPlaceholder = `!function(f,b,e,v,n,t,s)\n{if(f.fbq)return;n=f.fbq=function(){n.callMethod?\nn.callMethod.apply(n,arguments):n.queue.push(arguments)};\nif(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';\nn.queue=[];t=b.createElement(e);t.async=!0;\nt.src=v;s=b.getElementsByTagName(e)[0];\ns.parentNode.insertBefore(t,s)}(window, document,'script',\n'https://connect.facebook.net/en_US/fbevents.js');\nfbq('init', 'SEU ID DO PIXEL VAI AQUI');\nfbq('track', 'PageView');`;
 
@@ -136,7 +136,12 @@ export class ConfigFormPage implements OnInit {
 
   setData() {
     if(this.object.image){
-      this.image = {path: this.object.image, new: false};
+      this.image = {
+        new: false,
+        path: this.object.image.url,
+        width: this.object.image.width,
+        height: this.object.image.height,
+      };
     }
     this.form.get('shareMsg').setValue(this.object.shareMsg);
     this.form.get('title').setValue(this.object.title);
@@ -153,14 +158,21 @@ export class ConfigFormPage implements OnInit {
   async takeImage(event: any) {
     const loader = this.utils.loading('Comprimindo imagem...');
     const compress = await this.utils.uploadCompress(event.addedFiles[0]);
-    this.image = {path: compress.base64, file: compress.file, new: true};
+    this.image = {
+      new: true,
+      file: compress.file,
+      path: compress.base64,
+      width: compress.width,
+      height: compress.height,
+    };
     loader.componentInstance.msg = 'Imagem comprimida!';
     loader.componentInstance.done();
   }
 
   async saveImage(id: string) {
     if(this.image && this.image.new && this.image.file){
-      await this.fbConfig.addImage(id, this.image.file);
+      const data = {file: this.image.file, width: this.image.width, height: this.image.height};
+      await this.fbConfig.addImage(id, data);
     }
   }
 

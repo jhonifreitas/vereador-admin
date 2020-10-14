@@ -62,11 +62,12 @@ export class FBConfigService {
   }
 
   // IMAGE
-  async addImage(id: string, file: Blob){
+  async addImage(id: string, image: {file: Blob; width: number; height: number}){
     const fileName = id+'.png';
-    return await this.afStorage.ref(`${this.collectionName}/${fileName}`).put(file).then(async (res) => {
+    return await this.afStorage.ref(`${this.collectionName}/${fileName}`).put(image.file).then(async (res) => {
       const url = await res.ref.getDownloadURL();
-      await this.update(id, {image: url});
+      const data = {url: url, width: image.width, height: image.height};
+      await this.update(id, data);
     });
   }
 

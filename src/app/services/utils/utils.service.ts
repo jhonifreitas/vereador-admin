@@ -95,7 +95,7 @@ export class UtilsService {
     return this.date.transform(value, format);
   }
 
-  uploadCompress(file: File): Promise<{base64: string, file: Blob}> {
+  uploadCompress(file: File): Promise<{base64: string; file: Blob; width: number; height: number}> {
     return new Promise(async resolve => {
       const base64 = await this.readFile(file);
       const orientation = -1;
@@ -107,8 +107,13 @@ export class UtilsService {
         for (let i = 0; i < byteString.length; i++) {
           int8Array[i] = byteString.charCodeAt(i);
         }
-        const file = new Blob([int8Array], { type: 'image/png' });
-        resolve({base64: result, file: file});
+        const compressed = new Blob([int8Array], { type: 'image/png' });
+        const img = new Image();
+        img.onload = (event) => {
+          const target = event.target as any;
+          resolve({base64: result, file: compressed, width: target.width, height: target.height});
+        }
+        img.src = result;
       });
     });
   }

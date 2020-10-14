@@ -19,6 +19,7 @@ export class LoadingDialog implements OnInit {
   }
 
   constructor(
+    private ngZone: NgZone,
     private dialogRef: MatDialogRef<LoadingDialog>,
     @Inject(MAT_DIALOG_DATA) private data: {msg: string},
   ) {}
@@ -32,6 +33,8 @@ export class LoadingDialog implements OnInit {
   }
 
   close() {
-    this.dialogRef.close();
+    this.ngZone.run(_ => {
+      this.dialogRef.close();
+    })
   }
 }
