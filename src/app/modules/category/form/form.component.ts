@@ -91,10 +91,12 @@ export class CategoryFormPage implements OnInit {
 
       const tagImgs = [].slice.call(document.getElementsByClassName('ql-editor')[0].getElementsByTagName('img'));
       for(const tag of tagImgs){
-        const base64 = tag.src;
-        const file = this.utils.covertBase64ToBlob(base64);
-        const url = await this.fbCategory.addImage(file);
-        data.text = data.text.replace(base64, url);
+        const src:string = tag.src;
+        if(src.indexOf('base64') >= 0){
+          const file = this.utils.covertBase64ToBlob(src);
+          const url = await this.fbCategory.addImage(file);
+          data.text = data.text.replace(src, url);
+        }
       }
 
       if(this.id){
