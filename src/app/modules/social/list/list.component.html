@@ -17,20 +17,20 @@
     <mat-table matSort cdkDropList (cdkDropListDropped)="drop($event)" [dataSource]="dataSource">
 
       <ng-container matColumnDef="order">
-        <mat-header-cell *matHeaderCellDef fxFlex.gt-md="10"> Ordem </mat-header-cell>
-        <mat-cell *matCellDef="let element" fxFlex.gt-md="10"> 
+        <mat-header-cell *matHeaderCellDef fxFlex="10"> Ordem </mat-header-cell>
+        <mat-cell *matCellDef="let element" fxFlex="10"> 
           <mat-icon cdkDragHandle class="reorder">reorder</mat-icon>
         </mat-cell>
       </ng-container>
   
       <ng-container matColumnDef="type">
-        <mat-header-cell mat-sort-header *matHeaderCellDef> Tipo </mat-header-cell>
-        <mat-cell matRipple *matCellDef="let element" fxFlexAlign="stretch" (click)="openDetail(element)"> {{ element.type }} </mat-cell>
+        <mat-header-cell mat-sort-header *matHeaderCellDef fxFlex="20"> Tipo </mat-header-cell>
+        <mat-cell matRipple *matCellDef="let element" fxFlex="20" (click)="openDetail(element)"> {{ element.type }} </mat-cell>
       </ng-container>
   
       <ng-container matColumnDef="url">
-        <mat-header-cell *matHeaderCellDef fxFlex="40"> Url </mat-header-cell>
-        <mat-cell *matCellDef="let element" fxFlex="40">
+        <mat-header-cell *matHeaderCellDef> Url </mat-header-cell>
+        <mat-cell *matCellDef="let element" fxFlexAlign="stretch">
           <span class="truncate"> {{ element.url }} </span>
         </mat-cell>
       </ng-container>

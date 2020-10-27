@@ -17,8 +17,8 @@
     <mat-table matSort cdkDropList (cdkDropListDropped)="drop($event)" [dataSource]="dataSource">
 
       <ng-container matColumnDef="order">
-        <mat-header-cell *matHeaderCellDef fxFlex.gt-md="10"> Ordem </mat-header-cell>
-        <mat-cell *matCellDef="let element" fxFlex.gt-md="10"> 
+        <mat-header-cell *matHeaderCellDef fxFlex="10"> Ordem </mat-header-cell>
+        <mat-cell *matCellDef="let element" fxFlex="10"> 
           <mat-icon cdkDragHandle class="reorder">reorder</mat-icon>
         </mat-cell>
       </ng-container>

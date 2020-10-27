@@ -89,7 +89,7 @@ export class CategoryListPage implements OnInit {
     this.dataSource = null;
     moveItemInArray(newOrderData, event.previousIndex, event.currentIndex);
     for(const index in newOrderData){
-      if(newOrderData[index].order != this.object_list[index].order){
+      if(newOrderData[index].id != this.object_list[index].id){
         await this.fbCategory.update(newOrderData[index].id, {order: parseInt(index)})
       }
     }
