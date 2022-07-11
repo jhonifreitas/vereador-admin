@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  host: 'https://site.minhaproposta.org',
+  host: 'https://sistema.wisao.digital',
   firebase: {
     apiKey: "AIzaSyCZuaapSoHUfpngVSiY4oAbf4QKwyGt_dc",
     authDomain: "vereador-cdc01.firebaseapp.com",
