@@ -29,7 +29,7 @@
       <ng-container matColumnDef="image">
         <mat-header-cell *matHeaderCellDef fxFlex="10" fxLayoutAlign="center center"> Imagem </mat-header-cell>
         <mat-cell *matCellDef="let element" fxFlex="10" fxLayoutAlign="center center">
-          <img [src]="element.image ? element.image.url : 'assets/image/not-found-user.png'" class="thumbnail" alt="">
+          <img [src]="element.image.mobile || element.image.desktop ||  'assets/image/not-found-user.png'" class="thumbnail" alt="">
         </mat-cell>
       </ng-container>
   

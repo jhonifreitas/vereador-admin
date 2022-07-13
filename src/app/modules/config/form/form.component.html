@@ -1,19 +1,33 @@
 <h2 class="title">Configurações gerais</h2>
 
 <form [formGroup]="form">
+  <div class="container images mat-elevation-z8">
+    <h2>Imagem Desktop</h2>
+    <div class="image" *ngIf="desktop">
+      <button mat-mini-fab color="warn" (click)="deleteImageDesktop()">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <img [src]="desktop.path" alt="">
+    </div>
+    <ngx-dropzone (change)="takeImageDesktop($event)" *ngIf="!desktop">
+      <ngx-dropzone-label>Arraste os arquivos aqui ou clique para fazer o upload.</ngx-dropzone-label>
+    </ngx-dropzone>
+  </div>
+
   <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column">
-    <div id="images" fxFlex.gt-sm="60" class="container mat-elevation-z8">
-      <h2>Imagem</h2>
-      <div class="image" *ngIf="image">
-        <button mat-mini-fab color="warn" (click)="deleteImage()">
+    <div fxFlex.gt-sm="60" class="container images mat-elevation-z8">
+      <h2>Imagem Mobile</h2>
+      <div class="image" *ngIf="mobile">
+        <button mat-mini-fab color="warn" (click)="deleteImageMobile()">
           <mat-icon>delete</mat-icon>
         </button>
-        <img [src]="image.path" alt="">
+        <img [src]="mobile.path" alt="">
       </div>
-      <ngx-dropzone (change)="takeImage($event)" *ngIf="!image">
+      <ngx-dropzone (change)="takeImageMobile($event)" *ngIf="!mobile">
         <ngx-dropzone-label>Arraste os arquivos aqui ou clique para fazer o upload.</ngx-dropzone-label>
       </ngx-dropzone>
     </div>
+
     <div id="previewShare" fxFlex.gt-sm="40" fxFlexOffset.gt-sm="2" class="container">
       <div fxLayout="row">
         <div fxFlex>
@@ -27,8 +41,8 @@
       </div>
       <mat-card class="whatsapp mat-elevation-z8">
         <div class="header" fxLayout="row" fxLayoutAlign="center center">
-          <div class="image" *ngIf="image">
-            <img [src]="image.path" alt="">
+          <div class="image" *ngIf="mobile">
+            <img [src]="mobile.path" alt="">
           </div>
           <div class="text">
             <p class="title font-weight-medium">{{ form.get('title').value }}</p>
@@ -43,6 +57,7 @@
       </mat-card>
     </div>
   </div>
+
   <!-- WEBSITE -->
   <div id="website" class="container mat-elevation-z8">
     <h2>Website</h2>
@@ -77,6 +92,12 @@
     </div>
 
     <app-widget-select-tag [control]="form.get('keywords')" placeholder="Palavras chaves"></app-widget-select-tag>
+
+    <mat-form-field>
+      <mat-label>Frase Destaque</mat-label>
+      <textarea matInput rows="3" formControlName="titleFeatured"></textarea>
+      <mat-error>Frase Destaque é <strong>obrigatório!</strong></mat-error>
+    </mat-form-field>
 
     <mat-form-field>
       <mat-label>Descrição</mat-label>

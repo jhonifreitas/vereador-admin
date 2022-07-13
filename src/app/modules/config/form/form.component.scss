@@ -1,66 +1,78 @@
-.container{
+.container {
   padding: 1rem 2rem;
   margin-bottom: 1.5rem;
-  [fxlayout="row"]{margin-bottom: .5rem;}
-  &:last-child:not(#previewShare):not(#image){margin-bottom: 7.5rem;}
+  
+  [fxlayout="row"] {margin-bottom: .5rem;}
+  
+  &:last-child:not(#previewShare):not(.images) {margin-bottom: 7.5rem;}
 
-  .image{
-    position: relative;
+  .image {
     margin: 0 auto;
-    width: 180px;
-    height: 180px;
-    img{
+    position: relative;
+    
+    img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 50%;
+      border-radius: 10px;
     }
-    .mat-mini-fab{
-      top: 0;
-      right: 0;
+
+    .mat-mini-fab {
+      top: -1rem;
+      right: -1rem;
       position: absolute;
     }
   }
-  mat-form-field{
+
+  mat-form-field {
     width: 100%;
     margin-bottom: .5rem;
   }
-  ngx-dropzone{
+
+  ngx-dropzone {
     width: 100%;
     padding: 0 !important;
     margin-bottom: 1rem;
   }
 
-  &#previewShare{
+  &#previewShare {
     padding: 0;
-    .mat-mini-fab mat-icon{font-size: 1.2rem;}
-    .mat-card{
+    
+    .mat-mini-fab mat-icon {font-size: 1.2rem;}
+    
+    .mat-card {
       padding: 2px;
-      .header{
+      
+      .header {
         overflow: hidden;
         margin-bottom: 0;
         border-radius: 5px;
         background-color: rgba(0,0,0, .1);
-        .image{
+        
+        .image {
           margin: 0;
           min-width: 8rem;
           max-width: 8rem;
           min-height: 8rem;
           max-height: 8rem;
-          img{
+          
+          img {
             border-radius: 0;
             object-fit: cover;
           }
         }
-        .text{
+
+        .text {
           padding: 1rem;
           line-height: 1.5;
-          p{margin-bottom: 0;}
-          .desc, .url{font-size: .7rem;}
-          .desc{opacity: .5;}
+          
+          p {margin-bottom: 0;}
+          .desc, .url {font-size: .7rem;}
+          .desc {opacity: .5;}
         }
       }
-      .mat-card-content{
+
+      .mat-card-content {
         padding: .5rem;
       }
     }

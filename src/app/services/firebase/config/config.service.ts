@@ -61,20 +61,22 @@ export class FBConfigService {
     return this.db.collection(this.collectionName).doc<Config>(id).delete();
   }
 
+  private getStorageUrl(id: string, filename: string) {
+    return `${this.collectionName}/${id}/images/${filename}.png`;
+  }
+
   // IMAGE
-  async addImage(id: string, image: {file: Blob; width: number; height: number}){
-    const fileName = id+'.png';
-    return await this.afStorage.ref(`${this.collectionName}/${fileName}`).put(image.file).then(async (res) => {
+  async addImage(id: string, file: Blob, filename: string){
+    const path = this.getStorageUrl(id, filename);
+
+    return this.afStorage.ref(path).put(file).then(async (res) => {
       const url = await res.ref.getDownloadURL();
-      const data = {image: {url: url, width: image.width, height: image.height}};
-      await this.update(id, data);
+      return url;
     });
   }
 
-  async deleteImage(id: string){
-    const path = `${this.collectionName}/${id}.png`;
-    return this.afStorage.ref(path).delete().toPromise().then(async _ => {
-      await this.update(id, {image: null});
-    });
+  deleteImage(id: string, filename: string): Promise<void> {
+    const path = this.getStorageUrl(id, filename);
+    return this.afStorage.ref(path).delete().toPromise();
   }
 }

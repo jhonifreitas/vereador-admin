@@ -5,6 +5,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { Global } from 'src/app/models/global';
 import { Config } from 'src/app/models/config';
 import { environment } from 'src/environments/environment';
+
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { FBConfigService } from 'src/app/services/firebase/config/config.service';
@@ -23,7 +24,10 @@ export class ConfigFormPage implements OnInit {
   form: FormGroup;
   owners: Config[];
   host = environment.host;
-  image: {path: string; new: boolean, width: number, height: number, file?: Blob;};
+  
+  mobile: {path: string; new: boolean, file?: Blob;};
+  desktop: {path: string; new: boolean, file?: Blob;};
+
   donationMsg = 'Olá, abaixo nossos dados Bancários para nos ajudar:\n\nNome Completo:\nCNPJ:\nBanco:\nAgência:\nConta:';
   pixelPlaceholder = `!function(f,b,e,v,n,t,s)\n{if(f.fbq)return;n=f.fbq=function(){n.callMethod?\nn.callMethod.apply(n,arguments):n.queue.push(arguments)};\nif(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';\nn.queue=[];t=b.createElement(e);t.async=!0;\nt.src=v;s=b.getElementsByTagName(e)[0];\ns.parentNode.insertBefore(t,s)}(window, document,'script',\n'https://connect.facebook.net/en_US/fbevents.js');\nfbq('init', 'SEU ID DO PIXEL VAI AQUI');\nfbq('track', 'PageView');`;
 
@@ -40,6 +44,7 @@ export class ConfigFormPage implements OnInit {
     this.form = this.formGroup.group({
       shareMsg: new FormControl('', Validators.required),
       title: new FormControl('', Validators.required),
+      titleFeatured: new FormControl('', Validators.required),
       url: new FormControl('', [Validators.required, this.validatorUrl]),
       keywords: new FormControl([], Validators.required),
       description: new FormControl('', Validators.required),
@@ -136,56 +141,77 @@ export class ConfigFormPage implements OnInit {
   }
 
   setData() {
-    if(this.object.image){
-      this.image = {
-        new: false,
-        path: this.object.image.url,
-        width: this.object.image.width,
-        height: this.object.image.height,
-      };
-    }
+    if (this.object.image.mobile) this.mobile = {new: false, path: this.object.image.mobile};
+    if (this.object.image.desktop) this.desktop = {new: false, path: this.object.image.desktop};
+
     this.form.get('shareMsg').setValue(this.object.shareMsg);
     this.form.get('title').setValue(this.object.title);
+    this.form.get('titleFeatured').setValue(this.object.titleFeatured);
     this.form.get('url').setValue(this.object.url);
     this.form.get('keywords').setValue(this.object.keywords);
     this.form.get('description').setValue(this.object.description);
     this.form.get('donation').setValue(this.object.donation);
     this.form.get('pixel').setValue(this.object.pixel);
-    if(this.storage.getUser().superUser){
-      this.form.get('owner').setValue(this.object.owner);
-    }
+    
+    if (this.storage.getUser().superUser) this.form.get('owner').setValue(this.object.owner);
   }
 
-  async takeImage(event: any) {
+  async takeImageMobile(event: any) {
     const loader = this.utils.loading('Comprimindo imagem...');
     const compress = await this.utils.uploadCompress(event.addedFiles[0]);
-    this.image = {
+    this.mobile = {
       new: true,
       file: compress.file,
-      path: compress.base64,
-      width: compress.width,
-      height: compress.height,
+      path: compress.base64
     };
     loader.componentInstance.msg = 'Imagem comprimida!';
     loader.componentInstance.done();
   }
 
-  async saveImage(id: string) {
-    if(this.image && this.image.new && this.image.file){
-      const data = {file: this.image.file, width: this.image.width, height: this.image.height};
-      await this.fbConfig.addImage(id, data);
+  async takeImageDesktop(event: any) {
+    const loader = this.utils.loading('Comprimindo imagem...');
+    const compress = await this.utils.uploadCompress(event.addedFiles[0]);
+    this.desktop = {
+      new: true,
+      file: compress.file,
+      path: compress.base64
+    };
+    loader.componentInstance.msg = 'Imagem comprimida!';
+    loader.componentInstance.done();
+  }
+
+  async saveImages(id: string) {
+    if (this.mobile?.file || this.desktop?.file) {
+      if (this.mobile.new && this.mobile.file) {
+        this.object.image.mobile = await this.fbConfig.addImage(id, this.mobile.file, 'mobile');
+      }
+
+      if (this.desktop.new && this.desktop.file) {
+        this.object.image.desktop = await this.fbConfig.addImage(id, this.desktop.file, 'desktop');
+      }
+
+      await this.fbConfig.update(id, {image: this.object.image});
     }
   }
 
-  async deleteImage() {
-    if(!this.image.new){
+  async deleteImageMobile() {
+    if (!this.mobile.new) {
       this.utils.delete().then(async _ => {
-        await this.fbConfig.deleteImage(this.object.id);
-        this.image = null;
-      }).catch(_ => {})
-    }else{
-      this.image = null;
-    }
+        await this.fbConfig.deleteImage(this.object.id, 'mobile');
+        this.object.image.mobile = this.mobile = null;
+        await this.fbConfig.update(this.object.id, {image: this.object.image});
+      }).catch(_ => {});
+    } else this.mobile = null;
+  }
+
+  async deleteImageDesktop() {
+    if (!this.desktop.new) {
+      this.utils.delete().then(async _ => {
+        await this.fbConfig.deleteImage(this.object.id, 'desktop');
+        this.object.image.desktop = this.desktop = null;
+        await this.fbConfig.update(this.object.id, {image: this.object.image});
+      }).catch(_ => {});
+    } else this.desktop = null;
   }
 
   shareWhatsapp() {
@@ -196,28 +222,28 @@ export class ConfigFormPage implements OnInit {
   }
 
   async save() {
-    if(this.form.valid){
+    if (this.form.valid) {
       this.saving = true;
       const data = this.form.value;
+
       for (const field in data) {
-        if(!data[field] && data[field] != false){data[field] = null}
-        else if(data[field] instanceof Date){data[field] = data[field].toISOString()}
+        if (!data[field] && data[field] != false) data[field] = null
+        else if (data[field] instanceof Date) data[field] = data[field].toISOString()
       }
-      if(this.id){
+
+      if (this.id) {
         await this.fbConfig.update(this.id, data);
-        await this.saveImage(this.id);
-      }else{
+        await this.saveImages(this.id);
+      } else {
         await this.fbConfig.create(data).then(async doc => {
-          await this.saveImage(doc.id);
+          await this.saveImages(doc.id);
         });
       }
+
       this.saving = false;
-      if(this.storage.getUser().superUser){
-        this.router.navigateByUrl('/configuracoes');
-      }
+
+      if (this.storage.getUser().superUser) this.router.navigateByUrl('/configuracoes');
       this.utils.message('Configuração salva com sucesso!', 'success');
-    }else{
-      this.utils.message('Verifique os dados antes de salvar!', 'warn');
-    }
+    } else this.utils.message('Verifique os dados antes de salvar!', 'warn');
   }
 }
