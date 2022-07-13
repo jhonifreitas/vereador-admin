@@ -6,10 +6,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { Config } from 'src/app/models/config';
 import { Global } from 'src/app/models/global';
+
 import { ConfigDetailPage } from '../detail/detail.component';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { FBConfigService } from 'src/app/services/firebase/config/config.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
+import { FBConfigService } from 'src/app/services/firebase/config/config.service';
 
 @Component({
   selector: 'app-config-list',
@@ -65,15 +66,14 @@ export class ConfigListPage implements OnInit {
     }
   }
   
-  async deleteImage(id: string){
-    await this.fbConfig.deleteImage(id);
+  async deleteImages(id: string){
+    await this.fbConfig.deleteImage(id, 'mobile');
+    await this.fbConfig.deleteImage(id, 'desktop');
   }
 
   async delete(object: Config) {
     await this.fbConfig.delete(object.id).then(async _ => {
-      if(object.image){
-        await this.deleteImage(object.id);
-      }
+      if (object.image) await this.deleteImages(object.id);
       this.ngOnInit();
       this.utils.message('Configuração excluída com sucesso!', 'success');
     });
