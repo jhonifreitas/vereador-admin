@@ -99,7 +99,7 @@ export class UtilsService {
     return new Promise(async resolve => {
       const base64 = await this.readFile(file);
       const orientation = -1;
-      this.imageCompress.compressFile(base64, orientation, 50, 90).then(result => {
+      this.imageCompress.compressFile(base64, orientation, 100, 100).then(result => {
         // CONVERT BASE64 TO FILE
         const compressed = this.covertBase64ToBlob(result);
         const img = new Image();
