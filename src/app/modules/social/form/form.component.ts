@@ -25,6 +25,8 @@ export class SocialFormPage implements OnInit {
     {value: 'instagram', name: 'Instagram'},
     {value: 'youtube', name: 'Youtube'},
     {value: 'linkedin', name: 'Linkedin'},
+    {value: 'tiktok', name: 'TikTok'},
+    {value: 'twitter', name: 'Twitter'},
   ]
 
   constructor(

@@ -1,6 +1,9 @@
 export class Config {
   id?: string;
-  image: Image;
+  image: {
+    mobile?: string;
+    desktop?: string;
+  };
   
   // WEBSITE
   title: string;
@@ -16,11 +19,10 @@ export class Config {
   pixel?: string;
 
   constructor() {
-    this.image = new Image();
+    this.image = {
+      mobile: null,
+      desktop: null
+    };
   }
 }
 
-class Image {
-  mobile?: string;
-  desktop?: string;
-}

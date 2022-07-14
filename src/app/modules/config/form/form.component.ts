@@ -18,7 +18,7 @@ import { FBConfigService } from 'src/app/services/firebase/config/config.service
 export class ConfigFormPage implements OnInit {
 
   private id: string;
-  private object: Config;
+  private object: Config = new Config();
   
   saving = false;
   form: FormGroup;
@@ -54,17 +54,15 @@ export class ConfigFormPage implements OnInit {
   }
 
   ngOnInit(): void {
-    if(!this.id && !this.global.hasPermission('configuration', 'can-add')){
+    if (!this.id && !this.global.hasPermission('configuration', 'can-add')) {
       this.router.navigate(['/error/403']);
-    }else if(this.id && !this.global.hasPermission('configuration', 'can-update')){
+    } else if(this.id && !this.global.hasPermission('configuration', 'can-update')) {
       this.router.navigate(['/error/403']);
     }
 
-    if(this.id){
-      this.getConfig();
-    }
+    if (this.id) this.getConfig();
 
-    if(this.storage.getUser().superUser){
+    if (this.storage.getUser().superUser) {
       this.form.addControl('owner', new FormControl(''));
       this.getOwners();
     }
@@ -81,8 +79,8 @@ export class ConfigFormPage implements OnInit {
       hasSpecialChar?: boolean
     } = {};
     const value: string = form.value;
-    if(value){
-      if(value.match(/ /)){
+    if (value) {
+      if (value.match(/ /)) {
         result.hasSpace = true;
       } else if (value.match(/[A-Z]/)) {
         result.hasUppercase = true;
@@ -90,7 +88,7 @@ export class ConfigFormPage implements OnInit {
         result.hasSpecialChar = true;
       }
     }
-    return result
+    return result;
   }
 
   changeTitle() {
@@ -113,9 +111,9 @@ export class ConfigFormPage implements OnInit {
 
   checkUrl() {
     const url = this.object ? this.object.url : '';
-    if(this.controlUrl.value && (url != this.controlUrl.value)){
+    if (this.controlUrl.value && (url != this.controlUrl.value)) {
       this.fbConfig.getByURL(this.controlUrl.value).subscribe(config => {
-        if(config && (this.id || '') != this.controlUrl.value){
+        if (config && (this.id || '') != this.controlUrl.value) {
           this.controlUrl.setErrors({exist: true});
         }
       })
@@ -124,10 +122,10 @@ export class ConfigFormPage implements OnInit {
 
   getConfig() {
     this.fbConfig.get(this.id).subscribe(user => {
-      if(user){
+      if (user) {
         this.object = user;
         this.setData();
-      }else{
+      } else {
         this.router.navigate(['/configuracoes']);  
         this.utils.message('Configuração não encontrada!', 'warn');
       }
@@ -182,11 +180,11 @@ export class ConfigFormPage implements OnInit {
 
   async saveImages(id: string) {
     if (this.mobile?.file || this.desktop?.file) {
-      if (this.mobile.new && this.mobile.file) {
+      if (this.mobile?.new && this.mobile?.file) {
         this.object.image.mobile = await this.fbConfig.addImage(id, this.mobile.file, 'mobile');
       }
 
-      if (this.desktop.new && this.desktop.file) {
+      if (this.desktop?.new && this.desktop?.file) {
         this.object.image.desktop = await this.fbConfig.addImage(id, this.desktop.file, 'desktop');
       }
 
@@ -224,11 +222,12 @@ export class ConfigFormPage implements OnInit {
   async save() {
     if (this.form.valid) {
       this.saving = true;
-      const data = this.form.value;
-
+      Object.assign(this.object, this.form.value);
+      const data = JSON.parse(JSON.stringify(this.object));
+      
       for (const field in data) {
-        if (!data[field] && data[field] != false) data[field] = null
-        else if (data[field] instanceof Date) data[field] = data[field].toISOString()
+        if (!data[field] && data[field] != false) data[field] = null;
+        else if (data[field] instanceof Date) data[field] = data[field].toISOString();
       }
 
       if (this.id) {
