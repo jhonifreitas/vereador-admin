@@ -46,6 +46,7 @@ export class AdminListPage implements OnInit {
       this.router.navigate(['/error/403']);
     }
     this.fbAdmin.all().subscribe(users => {
+      users.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
       for(const user of users){
         if(user.config){
           this.fbConfig.get(user.config).subscribe(config => user._config = config)

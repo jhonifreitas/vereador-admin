@@ -44,6 +44,7 @@ export class GroupListPage implements OnInit {
       this.router.navigate(['/error/403']);
     }
     this.fbGroup.all().subscribe(groups => {
+      groups.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
       this.dataSource = new MatTableDataSource<Group>(groups);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;

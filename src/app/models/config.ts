@@ -8,12 +8,14 @@ export class Config {
   // WEBSITE
   title: string;
   titleFeatured: string;
-  url: string;
   keywords: string[];
   description: string;
   shareMsg: string;
   donation?: string;
   
+  url?: string;
+  domain?: string;
+
   owner?: string;
 
   pixel?: string;

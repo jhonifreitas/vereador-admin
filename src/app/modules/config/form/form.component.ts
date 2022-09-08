@@ -45,7 +45,8 @@ export class ConfigFormPage implements OnInit {
       shareMsg: new FormControl('', Validators.required),
       title: new FormControl('', Validators.required),
       titleFeatured: new FormControl('', Validators.required),
-      url: new FormControl('', [Validators.required, this.validatorUrl]),
+      url: new FormControl('', [this.validatorUrl]),
+      domain: new FormControl(''),
       keywords: new FormControl([], Validators.required),
       description: new FormControl('', Validators.required),
       donation: new FormControl(''),
@@ -68,8 +69,8 @@ export class ConfigFormPage implements OnInit {
     }
   }
 
-  get controlUrl() {
-    return this.form.get('url');
+  get controls() {
+    return this.form.controls;
   }
 
   validatorUrl(form: FormControl) {
@@ -106,15 +107,22 @@ export class ConfigFormPage implements OnInit {
     value = value.replace(/[^a-z0-9 -]/g, ''); // remove invalid chars
     value = value.replace(/\s+/g, '-'); // collapse whitespace and replace by -
     value = value.replace(/-+/g, '-'); // collapse dashes
-    this.controlUrl.setValue(value);
+    this.controls.url.setValue(value);
+  }
+
+  changeDomain() {
+    const domain: string = this.controls.domain.value;
+    if (domain) this.controls.url.disable();
+    else this.controls.url.enable();
+    this.controls.url.updateValueAndValidity();
   }
 
   checkUrl() {
     const url = this.object ? this.object.url : '';
-    if (this.controlUrl.value && (url != this.controlUrl.value)) {
-      this.fbConfig.getByURL(this.controlUrl.value).subscribe(config => {
-        if (config && (this.id || '') != this.controlUrl.value) {
-          this.controlUrl.setErrors({exist: true});
+    if (this.controls.url.value && (url != this.controls.url.value)) {
+      this.fbConfig.getByURL(this.controls.url.value).subscribe(config => {
+        if (config && (this.id || '') != this.controls.url.value) {
+          this.controls.url.setErrors({exist: true});
         }
       })
     }
@@ -146,6 +154,7 @@ export class ConfigFormPage implements OnInit {
     this.form.get('title').setValue(this.object.title);
     this.form.get('titleFeatured').setValue(this.object.titleFeatured);
     this.form.get('url').setValue(this.object.url);
+    this.form.get('domain').setValue(this.object.domain);
     this.form.get('keywords').setValue(this.object.keywords);
     this.form.get('description').setValue(this.object.description);
     this.form.get('donation').setValue(this.object.donation);
@@ -213,16 +222,21 @@ export class ConfigFormPage implements OnInit {
   }
 
   shareWhatsapp() {
+    const host = this.controls.domain.value || this.host;
     let msg = this.form.get('shareMsg').value.replace(/\n/gm, '%0a');
     msg += `%0a%0a`;
-    msg += `${this.host}/${this.controlUrl.value}`;
+    msg += `${host}/${this.controls.url.value}`;
     window.open(`whatsapp://send?text=${msg}`);
   }
 
   async save() {
+    const value = this.form.value;
+
+    if (!value.url && !value.domain) return this.utils.message('Cadastre uma URL ou Domínio!', 'warn');
+
     if (this.form.valid) {
       this.saving = true;
-      Object.assign(this.object, this.form.value);
+      Object.assign(this.object, value);
       const data = JSON.parse(JSON.stringify(this.object));
       
       for (const field in data) {

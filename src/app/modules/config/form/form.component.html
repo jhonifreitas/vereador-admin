@@ -34,7 +34,7 @@
           <h2>Visualização</h2>
         </div>
         <div fxFlex="none">
-          <button mat-mini-fab color="success" *ngIf="controlUrl.value && form.get('shareMsg').value" (click)="shareWhatsapp()">
+          <button mat-mini-fab color="success" *ngIf="(controls.url.value || controls.domain.value) && controls.shareMsg.value" (click)="shareWhatsapp()">
             <mat-icon fontSet="fab" fontIcon="fa-whatsapp"></mat-icon>
           </button>
         </div>
@@ -45,14 +45,19 @@
             <img [src]="mobile.path" alt="">
           </div>
           <div class="text">
-            <p class="title font-weight-medium">{{ form.get('title').value }}</p>
-            <p class="desc">{{ form.get('description').value }}</p>
+            <p class="title font-weight-medium">{{ controls.title.value }}</p>
+            <p class="desc">{{ controls.description.value }}</p>
             <p class="url">sistema.wisao.digital</p>
           </div>
         </div>
-        <mat-card-content class="text-wrap">{{ form.get('shareMsg').value }}
+        <mat-card-content class="text-wrap">{{ controls.shareMsg.value }}
           <br><br>
-          <a href="{{ host }}/{{ form.get('url').value }}">{{ host }}/{{ form.get('url').value }}</a>
+          <a href="https://{{ controls.domain.value }}" target="_blank" *ngIf="controls.domain.value">
+            https://{{ controls.domain.value }}
+          </a>
+          <a href="{{ host }}/{{ controls.url.value }}" target="_blank" *ngIf="!controls.domain.value">
+            {{ host }}/{{ controls.url.value }}
+          </a>
         </mat-card-content>
       </mat-card>
     </div>
@@ -62,7 +67,7 @@
   <div id="website" class="container mat-elevation-z8">
     <h2>Website</h2>
 
-    <mat-form-field *ngIf="form.get('owner')">
+    <mat-form-field *ngIf="controls.owner.value">
       <mat-label>Responsável</mat-label>
       <mat-select formControlName="owner">
         <mat-option *ngFor="let owner of owners" [value]="owner.id">{{ owner.title }}</mat-option>
@@ -75,23 +80,33 @@
         <input matInput formControlName="title" (keyup)="changeTitle()">
         <mat-error>Título é <strong>obrigatório!</strong></mat-error>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field fxFlex="25">
         <mat-label>Url</mat-label>
         <input matInput formControlName="url" (blur)="checkUrl()">
-        <mat-hint>
-          <a href="{{ host }}/{{ form.get('url').value }}" target="_blank">
-            {{ host }}/{{ form.get('url').value }}
+        <mat-hint *ngIf="!controls.domain.value">
+          <a href="{{ host }}/{{ controls.url.value }}" target="_blank">
+            {{ host }}/{{ controls.url.value }}
           </a>
         </mat-hint>
-        <mat-error *ngIf="controlUrl.hasError('exist')">Url já <strong>existente!</strong></mat-error>
-        <mat-error *ngIf="controlUrl.hasError('required')">Url é <strong>obrigatório!</strong></mat-error>
-        <mat-error *ngIf="controlUrl.hasError('hasSpace')">Url não pode conter <strong>espaço!</strong></mat-error>
-        <mat-error *ngIf="controlUrl.hasError('hasUppercase')">Url não pode conter letras <strong>maiúsculas!</strong></mat-error>
-        <mat-error *ngIf="controlUrl.hasError('hasSpecialChar')">Url não pode conter <strong>caractéres especiais!</strong></mat-error>
+        <mat-error *ngIf="controls.url.hasError('exist')">Url já <strong>existente!</strong></mat-error>
+        <mat-error *ngIf="controls.url.hasError('required')">Url é <strong>obrigatório!</strong></mat-error>
+        <mat-error *ngIf="controls.url.hasError('hasSpace')">Url não pode conter <strong>espaço!</strong></mat-error>
+        <mat-error *ngIf="controls.url.hasError('hasUppercase')">Url não pode conter letras <strong>maiúsculas!</strong></mat-error>
+        <mat-error *ngIf="controls.url.hasError('hasSpecialChar')">Url não pode conter <strong>caractéres especiais!</strong></mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex="25">
+        <mat-label>Domínio</mat-label>
+        <input matInput formControlName="domain" (keyup)="changeDomain()">
+        <mat-hint *ngIf="controls.domain.value">
+          <a href="https://{{ controls.domain.value }}" target="_blank">
+            https://{{ controls.domain.value }}
+          </a>
+        </mat-hint>
+        <mat-error>Domínio é <strong>obrigatório!</strong></mat-error>
       </mat-form-field>
     </div>
 
-    <app-widget-select-tag [control]="form.get('keywords')" placeholder="Palavras chaves"></app-widget-select-tag>
+    <app-widget-select-tag [control]="controls.keywords" placeholder="Palavras chaves"></app-widget-select-tag>
 
     <mat-form-field>
       <mat-label>Frase Destaque</mat-label>

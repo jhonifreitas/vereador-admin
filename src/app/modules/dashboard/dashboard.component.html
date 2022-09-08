@@ -1,6 +1,9 @@
-<div fxLayoutAlign="space-between center" fxLayoutGap="20px" class="stats-cards">
+<div fxLayoutAlign="start center" fxLayoutGap="20px" class="stats-cards">
   <mat-card fxFlex="50" fxFlex.gt-md="25">
-    <app-widget-card label="Acessos" [total]="access.length" icon="person_pin_circle"></app-widget-card>
+    <app-widget-card label="Acessos" [total]="access.length" icon="remove_red_eye"></app-widget-card>
+  </mat-card>
+  <mat-card fxFlex="50" fxFlex.gt-md="25">
+    <app-widget-card label="Usuários" [total]="users.length" icon="person_pin"></app-widget-card>
   </mat-card>
 </div>
 

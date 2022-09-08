@@ -44,6 +44,7 @@ export class PermissionListPage implements OnInit {
       this.router.navigate(['/error/403']);
     }
     this.fbPermission.all().subscribe(permissions => {
+      permissions.sort((a, b) => a.page.toLowerCase().localeCompare(b.page.toLowerCase()));
       this.dataSource = new MatTableDataSource<Permission>(permissions);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;

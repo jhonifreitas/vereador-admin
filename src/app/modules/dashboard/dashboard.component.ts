@@ -28,6 +28,7 @@ export class DashboardPage implements OnInit {
 
   user: Admin;
   loadingMap = true;
+  users: string[] = [];
   access: Access[] = [];
   loadingAccessChart = true;
   accessChart: Chart[] = [];
@@ -82,11 +83,13 @@ export class DashboardPage implements OnInit {
   getAnalytics() {
     if(!this.user.superUser && this.user.config){
       this.fbAnalytics.getByConfig(this.user.config).subscribe(analytics => {
+        this.users = analytics.map(x => x.ip);
         this.mountMarker(analytics);
         this.loadAccessChart(analytics);
       });
     }else{
       this.fbAnalytics.all().subscribe(analytics => {
+        this.users = analytics.map(x => x.ip);
         this.mountMarker(analytics);
         this.loadAccessChart(analytics);
       });

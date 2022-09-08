@@ -23,7 +23,12 @@
 
       <ng-container matColumnDef="url">
         <mat-header-cell mat-sort-header *matHeaderCellDef> Url </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{ element.url }} </mat-cell>
+        <mat-cell *matCellDef="let element"> {{ element.url || '---' }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="domain">
+        <mat-header-cell mat-sort-header *matHeaderCellDef> Domínio </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{ element.domain || '---' }} </mat-cell>
       </ng-container>
   
       <ng-container matColumnDef="image">
