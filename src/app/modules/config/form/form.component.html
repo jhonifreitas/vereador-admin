@@ -67,7 +67,7 @@
   <div id="website" class="container mat-elevation-z8">
     <h2>Website</h2>
 
-    <mat-form-field *ngIf="controls.owner.value">
+    <mat-form-field *ngIf="controls.owner">
       <mat-label>Responsável</mat-label>
       <mat-select formControlName="owner">
         <mat-option *ngFor="let owner of owners" [value]="owner.id">{{ owner.title }}</mat-option>
